@@ -3,6 +3,11 @@ import { createTheme } from "@mui/material/styles";
 
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#8A160B",
+    },
+  },
   components: {
     MuiTypography: {
       defaultProps: {
@@ -22,8 +27,8 @@ const theme = createTheme({
       fontWeight: "bold",
     },
     h1: {
-      fontSize: "48px",
-      fontWeight: "bold",
+      fontSize: "32px",
+      fontWeight: 900,
     }
   }
 })

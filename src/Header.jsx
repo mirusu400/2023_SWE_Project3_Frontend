@@ -17,7 +17,9 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-
+import { ReactComponent as Logo } from './assets/Logo.svg';
+import { Link as RouterLink } from 'react-router-dom';
+import theme from './theme';
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -41,55 +43,54 @@ const AppBar = styled(MuiAppBar, {
 const Header = ({ open, toggleDrawer }) => {
   return (
     <>
-      <AppBar position="absolute" open={open}>
-        <Toolbar
-          sx={{
-            pr: '24px', // keep right padding when drawer closed
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: "100%" }}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </Box>
+      <ThemeProvider theme={theme}>
+        <AppBar position="absolute" open={open}>
+          <Toolbar
+            sx={{
+              pr: '24px', // keep right padding when drawer closed
+            }}
+          >
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: "100%" }}>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: '36px',
+                  ...(open && { display: 'none' }),
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }} >
+                <Link component={RouterLink} to="/" underline="none" color="inherit" style={{ textDecoration: 'none' }}>
+                  <Logo />
+                </Link>
+              </Typography>
+              <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Box>
 
-        </Toolbar>
-      </AppBar>
-      <AppBar position="absolute" open={open} sx={{ top: '64px', backgroundColor: 'white' }}>
-        <Toolbar
-          sx={{
-            pr: '24px', // keep right padding when drawer closed
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: 'row', color: "black" }}>
-            TestUser123
-          </Box>
+          </Toolbar>
+        </AppBar>
+        <AppBar position="absolute" open={open} sx={{ top: '64px', backgroundColor: '#B10058', height: "40px", minHeight: "0px" }}>
+          <Toolbar
+            sx={{
+              pr: '24px', // keep right padding when drawer closed
+            }}
+            style={{ minHeight: "40px" }}
+          >
+            <Box sx={{ display: 'flex', flexDirection: 'row', color: "white" }}>
+              TestUser123
+            </Box>
 
-        </Toolbar>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
+      </ThemeProvider>
     </>
   )
 }

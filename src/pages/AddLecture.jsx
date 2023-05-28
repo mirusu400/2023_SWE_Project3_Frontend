@@ -7,33 +7,22 @@ import { Container, Grid, Box, Paper, Typography, Table, TableBody,
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+
 import theme from '../theme';
 
 const mock = [
-  { title: 'File I/O', start: '2023-04-27 00:00', end: '2023-05-01 00:00', progress: '10%' },
-  { title: 'File I/O', start: '2023-04-27 00:00', end: '2023-05-01 00:00', progress: '10%' },
+  { title: '시스템프로그래밍', start: '2023-04-27 00:00', end: '2023-05-01 00:00', progress: '10%' },
+  { title: '소프트웨어공학', start: '2023-04-27 00:00', end: '2023-05-01 00:00', progress: '10%' },
 ]
 
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  paddingRight: theme.spacing(3),
-  paddingLeft: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-  textAlign: 'left',
-  height: '270px',
-  
-}));
 
-
-const OnlineLecture = () => {
+const AddLecture = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
         <Typography variant='h1' component='h1' sx={{py: 3}}>
-          온라인강의
+          수강 신청
         </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -70,4 +59,4 @@ const OnlineLecture = () => {
   )
 };
 
-export default OnlineLecture;
+export default AddLecture;

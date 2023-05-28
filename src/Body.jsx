@@ -26,8 +26,9 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        광운대학교 LMS 서비스 
       </Link>
+      &nbsp;
       {new Date().getFullYear()}
     </Typography>
   );
