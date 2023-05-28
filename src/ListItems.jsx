@@ -9,64 +9,51 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '@mui/material';
 
-export const mainListItems = (
-  <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Customers" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItemButton>
-  </React.Fragment>
-);
+const MainListItems = () => {
+  const navigate = useNavigate();
+  return (
+    <React.Fragment>
+      <ListSubheader component="div" inset>
+        강의종합정보
+      </ListSubheader>
+      <ListItemButton>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="학습지원실" />
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate('/onlineLecture')}>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="온라인강의" />
+      </ListItemButton>
+      <ListSubheader component="div" inset>
+        공학교육
+      </ListSubheader>
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="학생 상담" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="학습성과 평가" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="이수현황 점검" />
+      </ListItemButton>
+    </React.Fragment>
+  )
+};
 
-export const secondaryListItems = (
-  <React.Fragment>
-    <ListSubheader component="div" inset>
-      Saved reports
-    </ListSubheader>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItemButton>
-  </React.Fragment>
-);
+export default MainListItems;

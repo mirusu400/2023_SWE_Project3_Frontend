@@ -8,18 +8,14 @@ import {
     Routes,
 } from "react-router-dom";
 import Home from "./pages/Home";
+import OnlineLecture from "./pages/OnlineLecture";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<Home />}>
-      {/* <Route path="/home" component={Home} /> */}
-    </Route>
-  )
-);
 
 const Router = () => (
-  <RouterProvider router={router}>
-  </RouterProvider>
+  <Routes>
+    <Route path="/" element={<Home />}> </Route>
+    <Route path="/onlineLecture" element={<OnlineLecture />}> </Route>
+  </Routes>
 )
 
 export default Router;

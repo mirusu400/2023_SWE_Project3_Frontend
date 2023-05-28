@@ -17,9 +17,10 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './ListItems';
+import MainListItems from './ListItems';
 import Router from './Router';
 import Header from './Header';
+import { BrowserRouter, RouterProvider } from 'react-router-dom';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -72,50 +73,51 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Header toggleDrawer={toggleDrawer} open={open} />
-        
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
+      <BrowserRouter>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <Header toggleDrawer={toggleDrawer} open={open} />
+          
+          <Drawer variant="permanent" open={open}>
+            <Toolbar
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                px: [1],
+                py: '44px',
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+                <MainListItems />
+              <Divider sx={{ my: 1 }} />
+            </List>
+          </Drawer>
+          <Box
+            component="main"
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-              py: '44px',
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'light'
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
+              flexGrow: 1,
+              height: '100vh',
+              overflow: 'auto',
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 8, mb: 4 }}>
-            <Router />
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
+            <Toolbar />
+            <Container maxWidth="lg" sx={{ mt: 8, mb: 4 }}>
+              <Router />
+              <Copyright sx={{ pt: 4 }} />
+            </Container>
+          </Box>
         </Box>
-      </Box>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

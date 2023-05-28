@@ -2,14 +2,20 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import Body from './Body';
+import Login from "./pages/Login"
 import { Box } from '@mui/material';
-
+import { ThemeProvider } from '@mui/material/styles';
+import { useCookies } from 'react-cookie';
+import theme from './theme';
 function App() {
   const [count, setCount] = useState(0)
-
+  const [cookies, setCookie] = useCookies(['JWT']);
   return (
     <>
-      <Body />
+      <ThemeProvider theme={theme}>
+        {/* { cookies.JWT ? <Body /> : <Login /> } */}
+        {<Body />}
+      </ThemeProvider>
     </>
   )
 }
