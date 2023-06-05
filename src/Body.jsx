@@ -21,6 +21,7 @@ import MainListItems from './ListItems';
 import Router from './Router';
 import Header from './Header';
 import { BrowserRouter, RouterProvider } from 'react-router-dom';
+import LearnTokTok from './pages/LearnTokTok';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -117,6 +118,12 @@ export default function Dashboard() {
               <Copyright sx={{ pt: 4 }} />
             </Container>
           </Box>
+        </Box>
+
+        {/* 학습톡톡 부분 */}
+        {/* Using absolute right bottom */}
+        <Box sx={{ position: 'absolute', bottom: 0, right: 0, p: 3 }}>
+          <LearnTokTok />
         </Box>
       </BrowserRouter>
     </ThemeProvider>

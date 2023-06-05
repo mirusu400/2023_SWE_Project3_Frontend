@@ -39,7 +39,7 @@ const HomeNotice = () => {
       </Box>
       <Box sx={{ display: 'flex', flexDirection: "column"}}>
         {mock.map((item, index) => (
-          <Box key={index} sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between"}}>
+          <Box key={index} sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between", py: 0.5}}>
             <Typography variant="span" component="span">
               {item.label}
             </Typography>

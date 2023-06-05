@@ -6,6 +6,8 @@ import { Box } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useCookies } from 'react-cookie';
 import theme from './theme';
+import 'react-grid-layout/css/styles.css'
+import 'react-resizable/css/styles.css'
 function App() {
   const [count, setCount] = useState(0)
   const [cookies, setCookie] = useCookies(['JWT']);
