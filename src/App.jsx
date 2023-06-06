@@ -15,7 +15,7 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
          { cookies.JWT ? <Body /> : <Login /> }
-        {/*{<Body />}*/}
+        {/* {<Body />} */}
       </ThemeProvider>
     </>
   )
