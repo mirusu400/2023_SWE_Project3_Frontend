@@ -16,7 +16,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import LoginInternalLogin from './components/LoginInternalLogin';
 import LoginInternalRegister from './components/LoginInternalRegister';
-import { Cookies } from 'react-cookie';
 
 function Copyright(props) {
   return (
@@ -39,27 +38,6 @@ const Login = () => {
 
   const [currentState, setCurrentState] = useState('login')
 
-  const [currentState, setCurrentState] = useState('login')
-    axios.defaults.crossDomain = true;
-
-    //TODO:login API
-    axios.post('http://localhost:8080/api/login', {
-      username: data.get('username'),
-      password: data.get('password'),
-    }, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    }).then((response) => {
-      console.log("response is: ", response);
-      // JWT cookie save
-      const cookies = new Cookies();
-      cookies.set('JWT', response.data.token, { path: '/' });
-    })
-  };
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -67,13 +45,13 @@ const Login = () => {
         <CssBaseline />
         <Grid
           item xs={false} sm={4} md={7} sx={{
-            backgroundImage: 'url(/kw_logo.jpg)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
+          backgroundImage: 'url(/kw_logo.jpg)',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: (t) =>
+            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           { currentState == 'login' ?

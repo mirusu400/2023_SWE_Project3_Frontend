@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { Cookies } from 'react-cookie';
 
 
 function Copyright(props) {
@@ -44,13 +45,22 @@ const LoginInternalLogin = (props) => {
     axios.defaults.crossDomain = true;
 
     //TODO:login API
-    axios.post('http://localhost:8080/api/login/', {
+    axios.post('http://localhost:8080/api/login', {
       username: data.get('username'),
       password: data.get('password'),
     }, {
       withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+      }
     }).then((response) => {
       console.log(response);
+        if (response.status === 200) {
+          // add cookies
+            const cookies = new Cookies();
+            cookies.set('JWT', response.data.token, { path: '/' });
+        }
+
     })
   };
 
