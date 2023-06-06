@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 
 
 function Copyright(props) {
@@ -36,9 +37,21 @@ const Login = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
+      username: data.get('username'),
       password: data.get('password'),
     });
+
+    axios.defaults.crossDomain = true;
+
+    //TODO:login API
+    axios.post('http://localhost:8080/api/login/', {
+      username: data.get('username'),
+      password: data.get('password'),
+    }, {
+      withCredentials: true,
+    }).then((response) => {
+      console.log(response);
+    })
   };
 
 
@@ -77,10 +90,10 @@ const Login = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="이메일"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="사용자 이름"
+                name="username"
+                autoComplete="username"
                 autoFocus
               />
               <TextField
