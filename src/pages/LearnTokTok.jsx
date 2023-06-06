@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,31 +17,63 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container } from '@mui/material';
 
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        LMS 서비스 (소프트웨어공학)
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
+const mock = [{
+  id: 1,
+  title: '소프트웨어공학',
+  professor: '교수1',
+}, {
+  id: 2,
+  title: '컴퓨터구조',
+  professor: '교수2',
+}, {
+  id: 3,
+  title: '컴퓨터네트워크',
+  professor: '교수3',
+}]
 
 
 const LearnTokTok = () => {
+
+  const [currentSelectedLectureId, setCurrentSelectedLectureId] = useState('')
+
+  const handleCurrentSelectedLectureIdChange = (id) => setCurrentSelectedLectureId(id);
   return (
     <ThemeProvider theme={theme}>
-      <Container>
-        <Box>
+      <Box sx={{ width: "200px", height: "250px", boxShadow: 1, p: 0, m: 0, borderRadius: 3 }}>
+        <Box sx={{ backgroundColor: "#424295", p: 1, color: "white" }} style={{
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        }}>
           학습톡톡
         </Box>
-      </Container>
+        <Box sx={{ display: "flex", flexDirection: "column", p: 1 }}>
+          { currentSelectedLectureId == '' ? (<>
+            {mock.map((item) => (
+              <Box key={item.id} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedLectureIdChange(item.id)}}>
+                <Typography sx={{ fontSize: 12 }}>
+                  {item.title}
+                </Typography>
+                <Typography sx={{ fontSize: 12 }}>
+                  {item.professor}
+                </Typography>
+              </Box>
+            ))}
+          </>
+          ) : (
+            <>
+              {mock.filter((item) => item.id == currentSelectedLectureId).map((item) => (
+                <>
+                  {item.title}
+                  <br/>
+                  {item.professor}
+                  <br/>
+                </>
+              ))}
+            </>
+          )}
+          
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 }
