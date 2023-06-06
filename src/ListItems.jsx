@@ -17,44 +17,50 @@ const MainListItems = () => {
   const navigate = useNavigate();
   return (
     <React.Fragment>
-      <ListSubheader component="div" inset>
+      <ListSubheader component="div" inset sx={{ pl: "72px"}}>
         강의종합정보
       </ListSubheader>
       <ListItemButton onClick={() => navigate('/')}>
-        <ListItemIcon>
+        <ListItemIcon sx={{ pl: "5px"}}>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="학습지원실" />
       </ListItemButton>
       <ListItemButton onClick={() => navigate('/onlineLecture')}>
-        <ListItemIcon>
+        <ListItemIcon sx={{ pl: "5px"}}>
           <CameraIcon />
         </ListItemIcon>
         <ListItemText primary="온라인강의" />
       </ListItemButton>
       <ListItemButton onClick={() => navigate('/addLecture')}>
-        <ListItemIcon>
+        <ListItemIcon sx={{ pl: "5px"}}>
           <ShoppingCartIcon />
         </ListItemIcon>
         <ListItemText primary="수강신청" />
       </ListItemButton>
-      <ListSubheader component="div" inset>
+      <ListItemButton onClick={() => navigate('/lectureQuestion')}>
+        <ListItemIcon sx={{ pl: "5px"}}>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="강의질문" />
+      </ListItemButton>
+      <ListSubheader component="div" inset sx={{ pl: "72px"}}>
         공학교육
       </ListSubheader>
       <ListItemButton>
-        <ListItemIcon>
+        <ListItemIcon sx={{ pl: "5px"}}>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="학생 상담" />
       </ListItemButton>
       <ListItemButton>
-        <ListItemIcon>
+        <ListItemIcon sx={{ pl: "5px"}}>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="학습성과 평가" />
       </ListItemButton>
       <ListItemButton>
-        <ListItemIcon>
+        <ListItemIcon sx={{ pl: "5px"}}>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="이수현황 점검" />

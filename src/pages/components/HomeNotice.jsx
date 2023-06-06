@@ -19,37 +19,37 @@ const mock = [
 const HomeNotice = () => {
   return (
     <ThemeProvider theme={theme}>
-    <Container>
-      <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-evenly", pb: 1}}>
-        <Typography variant="h5">
+      <Container>
+        <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-evenly", py: 1}}>
+          <Typography variant="h5">
           일반
-        </Typography>
-        <Typography variant="h5" component="h5">
+          </Typography>
+          <Typography variant="h5" component="h5">
           학부
-        </Typography>
-        <Typography variant="h5" component="h5">
+          </Typography>
+          <Typography variant="h5" component="h5">
           장학
-        </Typography>
-        <Typography variant="h5" component="h5">
+          </Typography>
+          <Typography variant="h5" component="h5">
           취업
-        </Typography>
-        <Typography variant="h5" component="h5">
+          </Typography>
+          <Typography variant="h5" component="h5">
           실시간베스트
-        </Typography>        
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: "column"}}>
-        {mock.map((item, index) => (
-          <Box key={index} sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between", py: 0.5}}>
-            <Typography variant="span" component="span">
-              {item.label}
-            </Typography>
-            <Typography variant="span" component="span">
-              {item.date}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-    </Container>
+          </Typography>        
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: "column"}}>
+          {mock.map((item, index) => (
+            <Box key={index} sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between", py: 0.5}}>
+              <Typography variant="span" component="span">
+                {item.label}
+              </Typography>
+              <Typography variant="span" component="span">
+                {item.date}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Container>
     </ThemeProvider>
   )
 };
