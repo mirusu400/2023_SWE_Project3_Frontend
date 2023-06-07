@@ -17,11 +17,13 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Draggable from 'react-draggable';
 import MainListItems from './ListItems';
 import Router from './Router';
 import Header from './Header';
 import { BrowserRouter, RouterProvider } from 'react-router-dom';
 import LearnTokTok from './pages/LearnTokTok';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -122,9 +124,14 @@ export default function Dashboard() {
 
         {/* 학습톡톡 부분 */}
         {/* Using absolute right bottom */}
-        <Box sx={{ position: 'absolute', bottom: 0, right: 0, p: 3 }}>
-          <LearnTokTok />
-        </Box>
+        {/* <Box sx={{ position: 'absolute', width: "100%", height: "100%" }}> */}
+        <Draggable>
+          <Box sx={{ position: 'absolute', bottom: 0, right: 0, p: 3, zIndex: 1 }}>
+            
+            <LearnTokTok />
+          </Box>
+        </Draggable>
+        {/* </Box> */}
       </BrowserRouter>
     </ThemeProvider>
   );

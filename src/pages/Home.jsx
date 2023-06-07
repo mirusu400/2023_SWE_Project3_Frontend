@@ -16,7 +16,6 @@ import HomeNotice from './components/HomeNotice';
 import HomeTimeTable from './components/HomeTimeTable';
 import HomeTodaysLesson from './components/HomeTodaysLesson';
 import HomeDateTable from './components/HomeDateTable';
-// react-grid-layout library 가져오기
 import { Responsive, WidthProvider } from 'react-grid-layout'
 const links = [
   { label: '장학금 신청 및 조회', icon: <SchoolIcon />, href: '#' },

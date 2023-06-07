@@ -59,11 +59,11 @@ const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="학습성과 평가" />
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton onClick={() => { navigate("/lectureRecord")}}>
         <ListItemIcon sx={{ pl: "5px"}}>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText primary="이수현황 점검" />
+        <ListItemText primary="성적 확인" />
       </ListItemButton>
     </React.Fragment>
   )

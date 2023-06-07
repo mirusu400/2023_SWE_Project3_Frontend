@@ -32,7 +32,7 @@ const AddLecture = () => {
                 <TableCell sx={{textAlign: "center", width: "40%"}}>제목</TableCell>
                 <TableCell sx={{textAlign: "center", width: "20%"}}>학습기간</TableCell>
                 <TableCell sx={{textAlign: "center"}}>학습진도율</TableCell>
-                <TableCell sx={{textAlign: "center"}}>강의보기</TableCell>
+                <TableCell sx={{textAlign: "center"}}>강의 수강</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -46,7 +46,7 @@ const AddLecture = () => {
                   <TableCell align="center">{row.progress}</TableCell>
                   <TableCell align="center">
                     <Button variant="contained" href="#contained-buttons">
-                      강의 시청하기
+                      강의 수강하기
                     </Button>
                   </TableCell>
                 </TableRow>

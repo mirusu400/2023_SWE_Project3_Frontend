@@ -12,7 +12,8 @@ import OnlineLecture from "./pages/OnlineLecture";
 import AddLecture from "./pages/AddLecture"
 import LectureQuestion from "./pages/LectureQuestionWrite"
 import LectureQuestionList from "./pages/LectureQuestionList";
-
+import LectureQuestionRead from "./pages/LectureQuestionRead";
+import LectureRecord from "./pages/LectureRecord";
 const Router = () => (
   <Routes>
     <Route path="/" element={<Home />}> </Route>
@@ -20,6 +21,8 @@ const Router = () => (
     <Route path="/addLecture" element={<AddLecture />}> </Route>
     <Route path="/lectureQuestion/write" element={<LectureQuestion />}> </Route>
     <Route path="/lectureQuestion" element={<LectureQuestionList />}> </Route>
+    <Route path="/lectureQuestion/read" element={<LectureQuestionRead />}> </Route>
+    <Route path="/lectureRecord" element={<LectureRecord />}> </Route>
   </Routes>
 )
 
