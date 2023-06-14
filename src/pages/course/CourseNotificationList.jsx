@@ -1,5 +1,7 @@
-import * as React from 'react';
+// 공지 페이지
 
+import * as React from 'react';
+import { useState } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Container, Grid, Box, Paper, Typography, Table, TableBody,
@@ -7,8 +9,8 @@ import { Container, Grid, Box, Paper, Typography, Table, TableBody,
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import theme from '../theme';
-import "./ckboard.css";
+import theme from '../../theme';
+import "./../ckboard.css";
 import { useNavigate } from 'react-router-dom';
 
 const mock = [
@@ -30,20 +32,20 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-const LectureQuestionList = () => {
+const CourseNotificationList = () => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(mock);
 
   const handleClickBoard = (id) => {
-    navigate(`/lectureQuestion/read?id=${id}`)
+    navigate(`/courseQuestion/read?id=${id}`)
   }
 
   return (
     <ThemeProvider theme={theme}>
       <Container>
         <Typography variant='h1' component='h1' sx={{py: 3}}>
-          강의 질문 목록
+          강의 공지사항 목록
         </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -69,11 +71,11 @@ const LectureQuestionList = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Button variant="contained" sx={{mt: 3, mb: 3}} onClick={() => { navigate('/lectureQuestion/write') }}>글쓰기</Button>
+        <Button variant="contained" sx={{mt: 3, mb: 3}} onClick={() => { navigate('/courseQuestion/write') }}>글쓰기</Button>
 
       </Container>
     </ThemeProvider>
   )
 };
 
-export default LectureQuestionList;
+export default CourseNotificationList;

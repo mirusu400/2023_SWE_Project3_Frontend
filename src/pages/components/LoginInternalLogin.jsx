@@ -34,6 +34,9 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 const LoginInternalLogin = (props) => {
+
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -55,12 +58,12 @@ const LoginInternalLogin = (props) => {
       }
     }).then((response) => {
       console.log(response);
-        if (response.status === 200) {
-          // add cookies
-            const cookies = new Cookies();
-            cookies.set('JWT', response.data.token, { path: '/' });
-        }
-
+      if (response.status === 200) {
+        // add cookies
+        const cookies = new Cookies();
+        cookies.set('JWT', response.data.token, { path: '/' });
+        window.location.href = "/";
+      }
     })
   };
 
@@ -96,10 +99,6 @@ const LoginInternalLogin = (props) => {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button
             type="submit"

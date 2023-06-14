@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +14,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 
 function Copyright(props) {
@@ -33,25 +37,37 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 const LoginInternalRegister = (props) => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
 
+  const [dob, setDob] = useState(new Date());
+
+  
+  const handleSubmit = (event) => {
+    console.log(event);
+    event.preventDefault();
+    
+    const data = new FormData(event.currentTarget);
     axios.defaults.crossDomain = true;
 
-    //TODO:login API
-    axios.post('http://localhost:8080/api/login/', {
+    //TODO: Register API
+    axios.post('http://localhost:8080/api/signup', {
       username: data.get('username'),
       password: data.get('password'),
+      name: data.get('name'),
+      semester: 0,
+      gender: 0,
+      dob: dob.toISOString().split('T')[0],
+      phone_number: data.get('phone-number'),
+      email: data.get('email'),
     }, {
       withCredentials: true,
     }).then((response) => {
-      console.log(response);
+      window.location.href = '/';
     })
+  };
+
+  const handleDob = (date) => {
+    console.log(date.$d);
+    setDob(date.$d);
   };
 
 
@@ -69,7 +85,12 @@ const LoginInternalRegister = (props) => {
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, mx: 8 }}>
           <TextField
             margin="normal" required fullWidth
-            id="username" label="사용자 이름" name="username"
+            id="name" label="사용자 이름" name="name"
+            autoComplete="name" autoFocus
+          />
+          <TextField
+            margin="normal" required fullWidth
+            id="username" label="아이디" name="username"
             autoComplete="username" autoFocus
           />
           <TextField
@@ -84,8 +105,20 @@ const LoginInternalRegister = (props) => {
           />
           <TextField
             margin="normal" required fullWidth
-            name="password" label="비밀번호 재확인" type="password2" id="password2"
+            name="password" label="비밀번호 재확인" type="password" id="password2"
             autoComplete="current-password"
+          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker 
+              label="생년월일" name="dob" id="dob"
+              sx={{ width: "100%" }}
+              onChange={handleDob}
+              inputFormat="YYYY-MM-DD"
+            />
+          </LocalizationProvider>
+          <TextField
+            margin="normal" required fullWidth
+            name="phone-number" label="휴대전화" id="phone-number"
           />
           <Button
             type="submit"

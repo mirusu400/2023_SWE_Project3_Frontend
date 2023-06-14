@@ -15,10 +15,12 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { ReactComponent as Logo } from './assets/Logo.svg';
 import { Link as RouterLink } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import theme from './theme';
 const drawerWidth = 240;
 
@@ -40,7 +42,14 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const Header = ({ open, toggleDrawer }) => {
+const Header = ({ open, toggleDrawer, data }) => {
+  const [cookie, setCookie, removeCookie] = useCookies(['JWT']);
+
+  const handleLogout = () => {
+    setCookie('JWT', '', { path: '/' });
+    window.location.href = "/";
+  }
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -69,8 +78,8 @@ const Header = ({ open, toggleDrawer }) => {
                 </Link>
               </Typography>
               <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
+                <Badge color="secondary" onClick={() => { handleLogout(); }}>
+                  <LogoutIcon />
                 </Badge>
               </IconButton>
             </Box>
@@ -85,7 +94,7 @@ const Header = ({ open, toggleDrawer }) => {
             style={{ minHeight: "40px" }}
           >
             <Box sx={{ display: 'flex', flexDirection: 'row', color: "white" }}>
-              TestUser123
+              {data.name && data.username ? `[${data.username}] ${data.name}` : "No Name"}
             </Box>
 
           </Toolbar>

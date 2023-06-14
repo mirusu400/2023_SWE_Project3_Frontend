@@ -18,17 +18,17 @@ const mock = {
   username: "테스트",
   id: 1,
   semester: "2021년 2학기",
-  lectures: [
+  courses: [
     { idx: "1", title: '소프트웨어공학', start: '2023-04-27 00:00', end: '2023-05-01 00:00', progress: '10%', point: "3", record: "A+" },
     { idx: "2", title: '컴퓨터구조', start: '2023-04-27 00:00', end: '2023-05-01 00:00', progress: '10%', point: "3", record: "A+" },
   ],
-  lectureOverall: {
+  courseOverall: {
     majorCredit: 34,
     refineCredit: 15,
   }
 }
 
-const LectureRecord = () => {
+const CourseRecord = () => {
   const [data, setData] = useState(mock);
 
   const navigate = useNavigate();
@@ -84,9 +84,9 @@ const LectureRecord = () => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell align="center">{data.lectureOverall.majorCredit}</TableCell>
-                <TableCell align="center">{data.lectureOverall.refineCredit}</TableCell>
-                <TableCell align="center">{data.lectureOverall.majorCredit + data.lectureOverall.refineCredit}</TableCell>
+                <TableCell align="center">{data.courseOverall.majorCredit}</TableCell>
+                <TableCell align="center">{data.courseOverall.refineCredit}</TableCell>
+                <TableCell align="center">{data.courseOverall.majorCredit + data.courseOverall.refineCredit}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -109,7 +109,7 @@ const LectureRecord = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.lectures.map((row, idx) => (
+              {data.courses.map((row, idx) => (
                 <TableRow key={row.id}>
                   <TableCell align="center">{row.title}</TableCell>
                   <TableCell align="center">{row.start}<br />{row.end}</TableCell>
@@ -125,4 +125,4 @@ const LectureRecord = () => {
   )
 };
 
-export default LectureRecord;
+export default CourseRecord;

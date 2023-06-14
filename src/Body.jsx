@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -23,6 +24,11 @@ import Router from './Router';
 import Header from './Header';
 import { BrowserRouter, RouterProvider } from 'react-router-dom';
 import LearnTokTok from './pages/LearnTokTok';
+import axios from 'axios';
+import { post, get } from './utils';
+import { useCookies } from 'react-cookie';
+
+
 
 function Copyright(props) {
   return (
@@ -74,13 +80,36 @@ export default function Dashboard() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [userData, setUserData] = useState({})
+  const [cookie, setCookie] = useCookies(['JWT'])
+
+  useEffect(() => {
+    const getUserData = async () => {
+      get("http://localhost:8080/api/user")
+        .then((response) => {
+          console.log(response);
+          if (response.status !== 200) {
+            setCookie('JWT', '', { path: '/' })
+            document.location.href = '/';
+          } else {
+            setUserData(response.data);
+          }
+        })
+        .catch((error) => {
+          setCookie('JWT', '', { path: '/' })
+          document.location.href = '/';
+        })
+    }
+    
+    getUserData();
+  }, [])
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <BrowserRouter>
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-          <Header toggleDrawer={toggleDrawer} open={open} />
+          <Header toggleDrawer={toggleDrawer} open={open} data={userData} />
           
           <Drawer variant="permanent" open={open}>
             <Toolbar

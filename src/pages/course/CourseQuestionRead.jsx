@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import theme from '../theme';
+import theme from '../../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +35,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-const LectureQuestion = () => {
+const CourseQuestionRead = () => {
 
   const [subject, setSubject] = useState('')
   const [title, setTitle] = useState('')
@@ -69,7 +69,7 @@ const LectureQuestion = () => {
           />
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <Button variant="contained" sx={{ mt: 3, mb: 3 }} onClick={() => { navigate("/lectureQuestion") }}>
+          <Button variant="contained" sx={{ mt: 3, mb: 3 }} onClick={() => { navigate("/courseQuestion") }}>
             글 목록으로
           </Button>
           <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={handleSubmit}>
@@ -81,4 +81,4 @@ const LectureQuestion = () => {
   )
 };
 
-export default LectureQuestion;
+export default CourseQuestionRead;

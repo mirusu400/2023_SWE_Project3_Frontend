@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
@@ -16,19 +18,14 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container, TextareaAutosize } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Textarea from '@mui/joy/Textarea';
+import { useEffect } from 'react';
+import { post, get } from '../utils';
 const mock = [{
-  id: 1,
-  title: '소프트웨어공학',
-  professor: '교수1',
-}, {
-  id: 2,
-  title: '컴퓨터구조',
-  professor: '교수2',
-}, {
-  id: 3,
-  title: '컴퓨터네트워크',
-  professor: '교수3',
+  lectureId: 1,
+  name: "소프트웨어공학",
+  semester: 3,
+  credit: 3,
+  type: "전공"
 }]
 
 const mock2 = [{
@@ -40,16 +37,33 @@ const mock2 = [{
 }, {
   id: 3,
   content: "테스트 채팅 3"  
+}, {
+  id: 4,
+  content: "테스트 채팅 3"  
+}, {
+  id: 5,
+  content: "테스트 채팅 3"  
+}, {
+  id: 6,
+  content: "테스트 채팅 3"  
 }]
 
 
 
 const LearnTokTok = () => {
-  const [lectureData, setLectureData] = useState(mock);
-  const [currentSelectedLectureId, setCurrentSelectedLectureId] = useState('')
+  const [courseData, setCourseData] = useState(mock);
+  const [currentSelectedcourseId, setCurrentSelectedcourseId] = useState('')
   const [currentChat, setCurrentChat] = useState(mock2)
 
-  const handleCurrentSelectedLectureIdChange = (id) => setCurrentSelectedLectureId(id);
+  useEffect(() => {
+    get('http://localhost:8080/api/lecture/list')
+      .then((response) => { 
+        console.log(response.data)
+        setCourseData(response.data) })
+      .catch((error) => { alert("데이터를 가져오는데 실패했습니다.") })
+  }, [])
+
+  const handleCurrentSelectedcourseIdChange = (id) => setCurrentSelectedcourseId(id);
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -62,36 +76,42 @@ const LearnTokTok = () => {
           borderTopRightRadius: 10,
         }}>
 
-          <Box sx={{ cursor: "pointer", width: '24px' }} onClick = {() => {handleCurrentSelectedLectureIdChange('')}}>
-            {currentSelectedLectureId != '' ? <><ChevronLeftIcon sx={{ fontSize: 12 }} /> &nbsp;</> : <></>}
+          <Box sx={{ cursor: "pointer", width: '24px' }} onClick = {() => {handleCurrentSelectedcourseIdChange('')}}>
+            {currentSelectedcourseId != '' ? <><ChevronLeftIcon sx={{ fontSize: 12 }} /> &nbsp;</> : <></>}
           </Box>
           학습톡톡
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", p: 1 }}>
-          { currentSelectedLectureId == '' ? (<>
-            {lectureData.map((item) => (
-              <Box key={item.id} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedLectureIdChange(item.id)}}>
+        <Box sx={{ display: "flex", flexDirection: "column", p: 1, height: "100%" }}>
+          { currentSelectedcourseId == '' ? (<>
+            {courseData.length > 0 ? (courseData.map((item) => (
+              <Box key={item.lectureId} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedcourseIdChange(item.id)}}>
                 <Typography sx={{ fontSize: 12 }}>
-                  {item.title}
+                  {item.name}
                 </Typography>
                 <Typography sx={{ fontSize: 12 }}>
-                  {item.professor}
+                  {item.type}
                 </Typography>
               </Box>
-            ))}
+            ))) : (
+              <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5 }}>
+                <Typography sx={{ fontSize: 12 }}>
+                  수강중인 강의가 없습니다.
+                </Typography>
+              </Box>
+            )}
           </>
           ) : (
             <>
-              {lectureData.filter((item) => item.id == currentSelectedLectureId).map((item) => (
-                <Box>
-                  <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedLectureIdChange('')}}>
+              {courseData.filter((item) => item.id == currentSelectedcourseId).map((item) => (
+                <Box key={item.id} sx={{ height: "100%"}}>
+                  <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedcourseIdChange('')}}>
                     <Typography sx={{ fontSize: 12 }}>
                     {item.title} &nbsp; {item.professor}
                     </Typography>
                   </Box>
-                  <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "left", py: 0.5 }}>
-                    {currentChat.map((item) => (
-                      <Box sx={{
+                  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", py: 0.5, height: "130px", overflow: "auto" }}>
+                    {currentChat.map((item, idx) => (
+                      <Box key={idx} sx={{
                         display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center",
                         borderRadius: 2, boxShadow: 1, backgroundColor: "#424295", height: "24px", my: 0.3, px: 1, minHeight: "24px"
                       }}>
@@ -101,7 +121,9 @@ const LearnTokTok = () => {
                       </Box>
                     ))}
                   </Box>
-                  <Textarea />
+                  <Box sx={{ display: "block", bottom: 0 }}>
+                    <TextField variant="standard"></TextField>
+                  </Box>
                 </Box>
               ))}
             </>

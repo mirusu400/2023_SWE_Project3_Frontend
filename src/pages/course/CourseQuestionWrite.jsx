@@ -8,11 +8,11 @@ import { Container, Grid, Box, Paper, Typography, Table, TableBody,
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import theme from '../theme';
+import theme from '../../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const mock = [{
+const courseList = [{
   id: 1,
   title: '소프트웨어공학',
 }, {
@@ -36,11 +36,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-const LectureQuestion = () => {
+const CourseQuestion = () => {
 
   const [subject, setSubject] = useState('')
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [courseList, setCourseList] = useState(CourseList)
 
   const handleSubjectChange = (event) => setSubject(event.target.value)
   const handleContentChange = (value) => setContent(value)
@@ -61,7 +62,7 @@ const LectureQuestion = () => {
           <FormControl fullWidth>
             <InputLabel htmlFor="subject">과목</InputLabel>
             <Select labelId="subject" id="subject" label="과목" onChange={handleSubjectChange}>
-              {mock.map((item) => (
+              {courseList.map((item) => (
                 <MenuItem value={item.id} key={item.id}>{item.title}</MenuItem>
               ))}
             </Select>
@@ -83,4 +84,4 @@ const LectureQuestion = () => {
   )
 };
 
-export default LectureQuestion;
+export default CourseQuestion;

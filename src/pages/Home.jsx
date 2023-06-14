@@ -17,6 +17,11 @@ import HomeTimeTable from './components/HomeTimeTable';
 import HomeTodaysLesson from './components/HomeTodaysLesson';
 import HomeDateTable from './components/HomeDateTable';
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+
+
 const links = [
   { label: '장학금 신청 및 조회', icon: <SchoolIcon />, href: '#' },
   { label: '졸업심사서 조회', icon: <FindInPageIcon />, href: '#' },
@@ -139,6 +144,11 @@ const DashboardDetailView = () => {
 
 
 const Home = () => {
+
+  
+
+  
+
   return (
     <ThemeProvider theme={theme}>
       <Container>
