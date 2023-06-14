@@ -13,13 +13,11 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { post, get } from '../../utils'
 import { useNavigate } from 'react-router-dom';
-import { DateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 
-const now = new Date();
-const sevenDaysLater = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7);
 const CourseWrite = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -27,17 +25,22 @@ const CourseWrite = () => {
   const [semester, setSemester] = useState(1)
   const [type, setType] = useState("교양")
   const [classroom, setClassroom] = useState("새빛관 101호")
-  const [beginAt, setBeginAt] = useState(new Date());
-  const [endAt, setEndAt] = useState(new Date(now.getFullYear(), now.getMonth() + 1, now.getDate()));
-
+  const [week1, setWeek1] = useState("월")
+  const [week2, setWeek2] = useState("월")
+  const [beginAt1, setBeginAt1] = useState(new Date());
+  const [endAt1, setEndAt1] = useState(new Date());
+  const [beginAt2, setBeginAt2] = useState(new Date());
+  const [endAt2, setEndAt2] = useState(new Date());
 
   const navigate = useNavigate();
 
-  const handleContentChange = (value) => setContent(value)
   const handleTitleChange = (event) => setTitle(event.target.value)
   const handleSubmit = async () => {
-    const beginTime = dayjs(beginAt).format('YYYY-MM-DDTHH:mm:ss');
-    const endTime = dayjs(endAt).format('YYYY-MM-DDTHH:mm:ss');
+    const beginTime1 = dayjs(beginAt1).format('HH:mm:ss');
+    const endTime1 = dayjs(endAt1).format('HH:mm:ss');
+    const beginTime2 = dayjs(beginAt2).format('HH:mm:ss');
+    const endTime2 = dayjs(endAt2).format('HH:mm:ss');
+
     let userId = 1;
     try {
       const result = await get("http://localhost:8080/api/user");
@@ -54,23 +57,31 @@ const CourseWrite = () => {
       type: type,
       lecturer_id: userId
     })
-      .then((res) => {
+      .then(async (res) => {
         const courseId = res.data.course_id;
-        post("http://localhost:8080/api/lecture/add-course-detail", {
-          course_id: courseId,
-          classroom: classroom,
-          begin_at: beginTime,
-          end_at: endTime
-        })
-          .then((res) => {
-            alert("강의가 추가되었습니다.");
-            navigate('/addCourse');
+        try {
+          await post("http://localhost:8080/api/lecture/add-course-detail", {
+            course_id: courseId,
+            classroom: classroom,
+            day_of_week: week1,
+            begin_at: beginTime1,
+            end_at: endTime1
           })
-          .catch((err) => {
-            alert("강의 추가에 실패했습니다.")
+          await post("http://localhost:8080/api/lecture/add-course-detail", {
+            course_id: courseId,
+            classroom: classroom,
+            day_of_week: week2,
+            begin_at: beginTime2,
+            end_at: endTime2
           })
+          alert("강의가 추가되었습니다.");
+          navigate('/addCourse');
+        }
+        catch {
+          alert("강의 추가에 실패했습니다.")
+        }
       })
-      .error((err) => {
+      .catch((err) => {
         alert("강의 추가에 실패했습니다.")
       })
   }
@@ -78,8 +89,8 @@ const CourseWrite = () => {
   const handleSemesterChange = (event) => setSemester(event.target.value)
   const handleTypeChange = (event) => setType(event.target.value)
   const handleClassroomChange = (event) => setClassroom(event.target.value)
-  const handleStartDateChange = (date) => { setBeginAt(date.$d) }
-  const handleEndDateChange = (date) => { setEndAt(date.$d) }
+
+
   return (
     <ThemeProvider theme={theme}>
       
@@ -118,22 +129,47 @@ const CourseWrite = () => {
               <MenuItem value={"전선"}>전선</MenuItem>
             </Select>
           </FormControl>
-          <TextField id="classroom" label="강의실" fullWidth sx={{my: 3}} onChange = { handleTitleChange } />
+          <TextField id="classroom" label="강의실" fullWidth sx={{my: 3}} onChange = { handleClassroomChange } />
           <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between" }}>
+            <FormControl sx={{ mb: 3, mr: 2, width: "15%" }}>
+              <InputLabel htmlFor="week1" filled>요일</InputLabel>
+              <Select labelId="week1" id="week1" label="요일" onChange={ (event) => { setWeek1(event.target.value) } }>
+                <MenuItem value={"월"}>월</MenuItem>
+                <MenuItem value={"화"}>화</MenuItem>
+                <MenuItem value={"수"}>수</MenuItem>
+                <MenuItem value={"목"}>목</MenuItem>
+                <MenuItem value={"금"}>금</MenuItem>
+              </Select>
+            </FormControl>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Box sx={{ display: 'flex', flexDirection: "column", width: "100%", mr: 3}}>
-                <Typography variant="span" component="span" sx={{my: 3, textAlign: "center"}}>시작일</Typography>
-                <DateTimePicker defaultValue={dayjs(beginAt)} onChange={handleStartDateChange} sx={{width: "100%"}}></DateTimePicker>
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: "column", width: "100%", ml: 3}}>
-                <Typography variant="span" component="span" sx={{my: 3, textAlign: "center"}}>종료일</Typography>
-                <DateTimePicker defaultValue={dayjs(endAt)} onChange={handleEndDateChange}></DateTimePicker>
-              </Box>
+              <Typography variant="span" component="span" sx={{my: 1.7, textAlign: "center"}}>시작시간</Typography>
+              <TimePicker onChange={(date) => {setBeginAt1(date.$d)}} ></TimePicker>
+              <Typography variant="span" component="span" sx={{my: 1.7, textAlign: "center"}}>종료시간</Typography>
+              <TimePicker onChange={(date) => {setEndAt1(date.$d)}}></TimePicker>
             </LocalizationProvider>
           </Box>
+          <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between" }}>
+            <FormControl sx={{ mb: 3, mr: 2, width: "15%" }}>
+              <InputLabel htmlFor="week2" filled>요일</InputLabel>
+              <Select labelId="week2" id="week2" label="요일" onChange={ (event) => { setWeek2(event.target.value) } }>
+                <MenuItem value={"월"}>월</MenuItem>
+                <MenuItem value={"화"}>화</MenuItem>
+                <MenuItem value={"수"}>수</MenuItem>
+                <MenuItem value={"목"}>목</MenuItem>
+                <MenuItem value={"금"}>금</MenuItem>
+              </Select>
+            </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Typography variant="span" component="span" sx={{my: 1.7, textAlign: "center"}}>시작시간</Typography>
+              <TimePicker onChange={(date) => {setBeginAt2(date.$d)}} ></TimePicker>
+              <Typography variant="span" component="span" sx={{my: 1.7, textAlign: "center"}}>종료시간</Typography>
+              <TimePicker onChange={(date) => {setEndAt2(date.$d)}}></TimePicker>
+            </LocalizationProvider>
+          </Box>
+          
         </Box>
       </Container>
-      <Button variant="contained" sx={{mt: 3, mb: 3, ml: 3}} onClick = { handleSubmit }>
+      <Button variant="contained" sx={{mt: 3, mb: 3, ml: 3}} fullWidth onClick = { handleSubmit }>
         강의 추가
       </Button>
     </ThemeProvider>

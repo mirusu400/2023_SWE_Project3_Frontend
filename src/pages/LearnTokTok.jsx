@@ -60,7 +60,7 @@ const LearnTokTok = ({userData}) => {
     get('http://localhost:8080/api/lecture/user-list')
       .then((response) => { 
         console.log(response.data)
-        setCourseData(response.data.lectureInfoList) })
+        setCourseData(response.data.courseList) })
       .catch((error) => { alert("데이터를 가져오는데 실패했습니다.") })
   }, [])
 
@@ -123,7 +123,7 @@ const LearnTokTok = ({userData}) => {
         <Box sx={{ display: "flex", flexDirection: "column", p: 1, height: "100%" }}>
           { currentSelectedcourseId == '' ? (<>
           {/* 강의 목록 */}
-            {courseData.length > 0 ? (courseData.map((item) => (
+            {courseData && courseData.length > 0 ? (courseData.map((item) => (
               <Box key={item.course_id} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }}
                 onClick = {() => {handleCurrentSelectedcourseIdChange(item.course_id)}}
               >
@@ -148,7 +148,7 @@ const LearnTokTok = ({userData}) => {
                 <Box key={item.id} sx={{ height: "100%"}}>
                   <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedcourseIdChange('')}}>
                     <Typography sx={{ fontSize: 12 }}>
-                    {item.title} &nbsp; {item.professor}
+                    {item.name} &nbsp; 학습톡톡
                     </Typography>
                   </Box>
                   <Box id="chat-box" sx={{ display: "flex", flexDirection: "column", alignItems: "left", py: 0.5, height: "130px", overflow: "auto" }}>

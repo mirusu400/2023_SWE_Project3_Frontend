@@ -40,7 +40,7 @@ const AddCourse = () => {
     })
       .then((res) => {
         alert("수강신청이 완료되었습니다.")
-        navigate('/onlineCourse');
+        window.location.href = '/onlineCourse';
       })
       .catch((err) => {
         console.log(err);
@@ -49,7 +49,7 @@ const AddCourse = () => {
   }
 
   useEffect(() => {
-    get("http://localhost:8080/api/lecture/list")
+    get("http://localhost:8080/api/lecture/course-list")
       .then((res) => {
         console.log(res.data);
         setCourses(res.data);

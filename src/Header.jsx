@@ -42,7 +42,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const Header = ({ open, toggleDrawer, data }) => {
+const Header = ({ open, toggleDrawer, data, selectedCourse }) => {
   const [cookie, setCookie, removeCookie] = useCookies(['JWT']);
 
   const handleLogout = () => {

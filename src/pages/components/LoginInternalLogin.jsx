@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -35,7 +36,7 @@ const defaultTheme = createTheme();
 
 const LoginInternalLogin = (props) => {
 
-
+  const [isError, setIsError] = useState(false)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -64,7 +65,10 @@ const LoginInternalLogin = (props) => {
         cookies.set('JWT', response.data.token, { path: '/' });
         window.location.href = "/";
       }
-    })
+    }).catch((error) => {
+      console.log(error);
+      setIsError(true)
+    });
   };
 
 
@@ -80,6 +84,7 @@ const LoginInternalLogin = (props) => {
           로그인
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, mx: 7 }}>
+          
           <TextField
             margin="normal"
             required
@@ -89,6 +94,7 @@ const LoginInternalLogin = (props) => {
             name="username"
             autoComplete="username"
             autoFocus
+
           />
           <TextField
             margin="normal"
@@ -100,6 +106,7 @@ const LoginInternalLogin = (props) => {
             id="password"
             autoComplete="current-password"
           />
+          {isError ? <Typography color="red">아이디 또는 비밀번호를 확인해 주세요</Typography> : <Typography>&nbsp;</Typography>}
           <Button
             type="submit"
             fullWidth

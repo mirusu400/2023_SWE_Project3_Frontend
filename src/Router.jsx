@@ -38,7 +38,9 @@ const Router = ({
       element={<CourseNotificationList selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
     > </Route>
     <Route path="/courseNotification/read" element={<CourseNotificationRead />}> </Route>
-    <Route path="/courseArchive" element={<CourseArchiveList />}> </Route>
+    <Route path="/courseArchive" 
+      element={<CourseArchiveList selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+    > </Route>
     <Route path="/courseWrite"
       element={<CourseWrite selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
     > </Route>

@@ -37,19 +37,20 @@ const HomeTodaysLesson = () => {
     get("http://localhost:8080/api/lecture/user-list")
       .then((res) => {
         console.log("res.data", res.data)
-        setLectures(res.data.lectureInfoList);
+        setLectures(res.data.courseList);
       })
   }, [])
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', flexDirection: "column"}}>
-        {lectures.map((item, index) => (
+        {lectures && lectures.length > 0 && lectures.map((item, index) => (
           <Box key={index} sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between", my: 0.75 }}>
             <Typography variant="span" component="span">
             [{index+1}]&nbsp;{item.name}
             </Typography>
           </Box>
         ))}
+        { (!lectures) && <Typography variant="span" component="span">수강중인 강의가 없습니다.</Typography>}
       </Box>
     </ThemeProvider>
   )

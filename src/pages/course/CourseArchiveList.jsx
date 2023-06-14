@@ -1,45 +1,58 @@
 // 자료실 목록 페이지
 
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Container, Grid, Box, Paper, Typography, Table, TableBody,
-  TableCell, TableContainer, TableHead, TableRow, Button
+  TableCell, TableContainer, TableHead, TableRow, Button, FormControl, InputLabel,
+  Select, MenuItem
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import theme from '../../theme';
 import "./../ckboard.css";
 import { useNavigate } from 'react-router-dom';
+import { get, post } from "../../utils";
 
 const mock = [
   { title: 'File I/O', date: '2023-04-27 00:00', writer: 'ㅇㅇ(223.39)', id: "1" },
   { title: 'File I/O', date: '2023-04-27 00:00', writer: 'ㅇㅇ(39.7)', id: "2" },
 ]
 
+const CourseList = [{
+  id: 1,
+  title: '소프트웨어공학',
+}, {
+  id: 2,
+  title: '컴퓨터구조',
+}, {
+  id: 3,
+  title: '컴퓨터네트워크',
+}]
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  paddingRight: theme.spacing(3),
-  paddingLeft: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-  textAlign: 'left',
-  height: '270px',
-  
-}));
-
-
-const CourseArchiveList = () => {
+const CourseArchiveList = ({selectedCourseId, setSelectedCourseId}) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(mock);
+  const [courseList, setCourseList] = useState(CourseList);
 
   const handleClickBoard = (id) => {
-    navigate(`/courseQuestion/read?id=${id}`)
+    navigate(`/courseArchive/read?id=${id}`)
   }
+
+  const handleCourseChange = (event) => {
+    setSelectedCourseId(event.target.value);
+    // TODO: 해당 Course Id를 바탕으로 질문 목록 가져오기
+  }
+
+  useEffect(() => {
+    get("http://localhost:8080/api/lecture/user-list")
+      .then((res) => {
+        console.log(res.data);
+        setCourseList(res.data.courseList);
+      })
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -47,6 +60,14 @@ const CourseArchiveList = () => {
         <Typography variant='h1' component='h1' sx={{py: 3}}>
           강의 자료실 목록
         </Typography>
+        <FormControl fullWidth sx={{ mb: 3 }}>
+          <InputLabel htmlFor="subject" filled>과목</InputLabel>
+          <Select key="subject" labelId="subject" id="subject" label="과목" onChange={handleCourseChange} defaultValue={selectedCourseId}>
+            {courseList && courseList.length > 0 && courseList.map((item) => (
+              <MenuItem value={item.course_id} key={item.course_id}>{item.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>

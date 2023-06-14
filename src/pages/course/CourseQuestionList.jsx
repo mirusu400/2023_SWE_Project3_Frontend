@@ -50,7 +50,7 @@ const CourseQuestionList = ({selectedCourseId, setSelectedCourseId}) => {
     get("http://localhost:8080/api/lecture/user-list")
       .then((res) => {
         console.log(res.data);
-        setCourseList(res.data.lectureInfoList);
+        setCourseList(res.data.courseList);
       })
   }, [])
 
@@ -63,7 +63,7 @@ const CourseQuestionList = ({selectedCourseId, setSelectedCourseId}) => {
         <FormControl fullWidth sx={{ mb: 3 }}>
           <InputLabel htmlFor="subject" filled>과목</InputLabel>
           <Select key="subject" labelId="subject" id="subject" label="과목" onChange={handleCourseChange} defaultValue={selectedCourseId}>
-            {courseList.map((item) => (
+            {courseList && courseList.length > 0 && courseList.map((item) => (
               <MenuItem value={item.course_id} key={item.course_id}>{item.name}</MenuItem>
             ))}
           </Select>

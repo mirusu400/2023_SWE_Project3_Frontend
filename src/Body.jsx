@@ -98,6 +98,7 @@ export default function Dashboard() {
   };
   const [userData, setUserData] = useState({})
   const [selectedCourseId, setSelectedCourseId] = useState(1);
+  const [selectedCourse, setSelectedCourse] = useState({})
   const [cookie, setCookie] = useCookies(['JWT'])
 
   useEffect(() => {
@@ -118,9 +119,18 @@ export default function Dashboard() {
           document.location.href = '/';
         })
     }
-    
     getUserData();
   }, [])
+
+  useEffect(() => {
+    if (selectedCourseId == undefined || selectedCourseId == 0) return;
+    get(`http://localhost:8080/api/lecture/get-lecture?id=${selectedCourseId}`)
+      .then((response) => {
+        console.info("::Got Course Info::")
+        console.log(response.data)
+        setSelectedCourse(response.data)
+      })
+  }, [selectedCourseId])
 
   return (
     <ThemeProvider theme={defaultTheme}>

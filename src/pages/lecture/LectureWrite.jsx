@@ -76,8 +76,8 @@ const LectureWrite = ({userData, selectedCourseId, setSelectedCourseId}) => {
   useEffect(() => {
     get("http://localhost:8080/api/lecture/user-list")
       .then((res) => {
-        console.log(res.data.lectureInfoList)
-        setCourses(res.data.lectureInfoList);
+        console.log(res.data.courseList)
+        setCourses(res.data.courseList);
       })
       .catch((err) => {
         console.log(err);
@@ -113,7 +113,7 @@ const LectureWrite = ({userData, selectedCourseId, setSelectedCourseId}) => {
           <FormControl fullWidth sx={{  }}>
             <InputLabel htmlFor="course" id="course-select" filled>강의</InputLabel>
             <Select labelId="course-select" id="course" label="강의" defaultValue={selectedCourseId} onChange={ handleCourseChange }>
-              {courses.length > 0 && courses.map((course) => (
+              {courses && courses.length > 0 && courses.map((course) => (
                 <MenuItem key={course.course_id} value={course.course_id}>{course.name}</MenuItem>
               ))}
               
