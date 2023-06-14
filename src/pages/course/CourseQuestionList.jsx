@@ -11,6 +11,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import theme from '../../theme';
 import "./../ckboard.css";
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { get, post } from "../../utils";
 
 const mock = [
   { title: 'File I/O', date: '2023-04-27 00:00', writer: 'ㅇㅇ(223.39)', id: "1" },
@@ -29,20 +31,7 @@ const CourseList = [{
 }]
 
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  paddingRight: theme.spacing(3),
-  paddingLeft: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-  textAlign: 'left',
-  height: '270px',
-  
-}));
-
-
-const CourseQuestionList = () => {
+const CourseQuestionList = ({selectedCourseId, setSelectedCourseId}) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(mock);
@@ -52,9 +41,18 @@ const CourseQuestionList = () => {
     navigate(`/courseQuestion/read?id=${id}`)
   }
 
-  const handleSubjectChange = () => {
-
+  const handleCourseChange = (event) => {
+    setSelectedCourseId(event.target.value);
+    // TODO: 해당 Course Id를 바탕으로 질문 목록 가져오기
   }
+
+  useEffect(() => {
+    get("http://localhost:8080/api/lecture/user-list")
+      .then((res) => {
+        console.log(res.data);
+        setCourseList(res.data.lectureInfoList);
+      })
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,9 +62,9 @@ const CourseQuestionList = () => {
         </Typography>
         <FormControl fullWidth sx={{ mb: 3 }}>
           <InputLabel htmlFor="subject" filled>과목</InputLabel>
-          <Select labelId="subject" id="subject" label="과목" onChange={handleSubjectChange}>
+          <Select key="subject" labelId="subject" id="subject" label="과목" onChange={handleCourseChange} defaultValue={selectedCourseId}>
             {courseList.map((item) => (
-              <MenuItem value={item.id} key={item.id}>{item.title}</MenuItem>
+              <MenuItem value={item.course_id} key={item.course_id}>{item.name}</MenuItem>
             ))}
           </Select>
         </FormControl>

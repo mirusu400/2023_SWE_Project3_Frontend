@@ -19,20 +19,8 @@ const mock = [
 ]
 
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  paddingRight: theme.spacing(3),
-  paddingLeft: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-  textAlign: 'left',
-  height: '270px',
-  
-}));
 
-
-const CourseNotificationList = () => {
+const CourseNotificationList = ({selectedCourseId, setSelectedCourseId}) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(mock);

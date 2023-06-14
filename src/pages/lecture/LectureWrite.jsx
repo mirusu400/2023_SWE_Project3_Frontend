@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,94 +11,138 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import theme from '../../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { post, get } from '../../utils'
+import { post, get, postFile } from '../../utils'
 import { useNavigate } from 'react-router-dom';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import { MuiFileInput } from 'mui-file-input';
 
-const CourseWrite = () => {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [credit, setCredit] = useState(1)
-  const [semester, setSemester] = useState(1)
-  const [subject, setSubject] = useState()
+const mock = [{
+  courseId: 1,
+  name: "소프트웨어공학",
+  semester: 3,
+  credit: 3,
+  type: "전공"
+}]
+
+const now = new Date();
+const sevenDaysLater = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7);
+
+const LectureWrite = ({userData, selectedCourseId, setSelectedCourseId}) => {
+  const [courses, setCourses] = useState(mock);
+  const [classroom, setClassroom] = useState("");
+  const [title, setTitle] = useState("");
+  const [beginAt, setBeginAt] = useState(new Date());
+  const [endAt, setEndAt] = useState(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7));
+  const [file, setFile] = useState(null);
 
   const navigate = useNavigate();
 
-  const handleContentChange = (value) => setContent(value)
-  const handleTitleChange = (event) => setTitle(event.target.value)
   const handleSubmit = async () => {
-    let userId = 1;
-    try {
-      const result = await get("http://localhost:8080/api/user");
-      console.log(result);
-      userId = result.data.userId;
-    } catch {
-      alert("로그인이 필요합니다.");
-      return;
-    }
-    post("http://localhost:8080/api/lecture/add-course", {
-      title: title,
-      content: content,
-      credit: credit,
-      semester: semester,
-      subject: subject,
-      lecturer_id: userId
+    const userId = userData.userId;
+    const beginTime = dayjs(beginAt).format("YYYY-MM-DDTHH:mm:ss");
+    const endTime = dayjs(endAt).format("YYYY-MM-DDTHH:mm:ss");
+    console.log(file)
+    post("http://localhost:8080/api/lecture/add-lecture", {
+      "course_id": selectedCourseId,
+      "classroom": classroom,
+      "lecture_name": title,
+      "begin_at": beginTime,
+      "end_at": endTime,  
     })
       .then((res) => {
-        alert("강의가 추가되었습니다.");
-        navigate('/addCourse');
+        const lectureId = res.data.id;
+        postFile("http://localhost:8080/api/lecture/add-video", lectureId, file)
+          .then((res) => {
+            console.log(res);
+            alert("수업이 추가되었습니다.");
+            navigate("/onlineCourse");
+          })
+          .catch((err) => {
+            console.log(err);
+            alert("수업 동영상 추가에 실패했습니다.");
+            navigate("/onlineCourse");
+          })
+
       })
-      .error((err) => {
-        alert("강의 추가에 실패했습니다.")
+      .catch((err) => {
+        console.log(err);
+        alert("수업 추가에 실패했습니다.");
       })
   }
-  const handleCreditChange = (event) => setCredit(event.target.value)
-  const handleSemesterChange = (event) => setSemester(event.target.value)
+
+  useEffect(() => {
+    get("http://localhost:8080/api/lecture/user-list")
+      .then((res) => {
+        console.log(res.data.lectureInfoList)
+        setCourses(res.data.lectureInfoList);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("강의 목록을 불러오는데 실패했습니다.")
+      })
+  }, [])
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  }
+
+  const handleCourseChange = (event) => setSelectedCourseId(event.target.value)
+  const handleClassroomChange = (event) => setClassroom(event.target.value)
+
+  const handleStartDateChange = (date) => { 
+    setBeginAt(date.$d)
+  }
+  const handleEndDateChange = (date) => { 
+    setEndAt(date.$d)
+  }
+
+  const handleFileChange = (newFIle) => { setFile(newFIle) }
+
+
   return (
     <ThemeProvider theme={theme}>
       
       <Container>
         <Typography variant='h1' component='h1' sx={{py: 3}}>
-          강의 추가
+          수업 추가
         </Typography>
         <Box>
-          <TextField id="title" label="강의명" fullWidth sx={{my: 3}} onChange = { handleTitleChange } />
-          <Box sx={{ mb: 3, display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <FormControl fullWidth sx={{ mb: 3, mr: 2 }}>
-              <InputLabel htmlFor="credit" filled>학점</InputLabel>
-              <Select labelId="credit" id="credit" label="학점" onChange={ handleCreditChange }>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                
-              </Select>
-            </FormControl>
-            <FormControl fullWidth sx={{ mb: 3, ml: 2 }}>
-              <InputLabel htmlFor="subject" filled>학년</InputLabel>
-              <Select labelId="subject" id="subject" label="학년" onChange={ handleSemesterChange }>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-              </Select>
-            </FormControl>
+          <FormControl fullWidth sx={{  }}>
+            <InputLabel htmlFor="course" id="course-select" filled>강의</InputLabel>
+            <Select labelId="course-select" id="course" label="강의" defaultValue={selectedCourseId} onChange={ handleCourseChange }>
+              {courses.length > 0 && courses.map((course) => (
+                <MenuItem key={course.course_id} value={course.course_id}>{course.name}</MenuItem>
+              ))}
+              
+            </Select>
+          </FormControl>
+          <TextField id="title" label="수업 명" fullWidth sx={{my: 3}} onChange = { handleTitleChange } />
+          <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between" }}>
+            <TextField id="classroom" label="강의실 위치" onChange = { handleClassroomChange } sx={{ width: "50%", pr: 3}} />
+            <MuiFileInput value={file} label="강의 동영상 파일" onChange={handleFileChange} sx={{ width: "50%", pl: 3}} />
           </Box>
-          <Typography variant='span' sx={{ mb: 3 }}>
-            강의 설명(계획)
-          </Typography>
-          <CKEditor
-            editor={ ClassicEditor }
-            data=""
-            onChange={( event, editor ) => { 
-              handleContentChange(editor.getData());
-            }}
-          />
+          <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between" }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box sx={{ display: 'flex', flexDirection: "column", width: "100%", mr: 3}}>
+                <Typography variant="span" component="span" sx={{my: 3, textAlign: "center"}}>시작일</Typography>
+                <DateTimePicker defaultValue={dayjs(beginAt)} onChange={handleStartDateChange} sx={{width: "100%"}}></DateTimePicker>
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: "column", width: "100%", ml: 3}}>
+                <Typography variant="span" component="span" sx={{my: 3, textAlign: "center"}}>종료일</Typography>
+                <DateTimePicker defaultValue={dayjs(endAt)} onChange={handleEndDateChange}></DateTimePicker>
+              </Box>
+            </LocalizationProvider>
+          </Box>
         </Box>
       </Container>
-      <Button variant="contained" sx={{mt: 3, mb: 3, ml: 3}} onClick = { handleSubmit }>
-        강의 추가
+      <Button variant="contained" sx={{mt: 3, mb: 3, ml: 3, width: "100%"}} onClick = { handleSubmit }>
+        수업 추가
       </Button>
     </ThemeProvider>
   )
 };
 
-export default CourseWrite;
+export default LectureWrite;

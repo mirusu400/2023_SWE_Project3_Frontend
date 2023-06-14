@@ -28,7 +28,23 @@ import axios from 'axios';
 import { post, get } from './utils';
 import { useCookies } from 'react-cookie';
 
-
+const mockUserData = {
+  "userId": 1,
+  "username": "mirusu400",
+  "password": null,
+  "name": "김성진",
+  "semester": 0,
+  "gender": 0,
+  "dob": "2000-01-10",
+  "phone_number": "010-9808-4536",
+  "email": "mirusu400@naver.com",
+  "authorityDtoSet": [
+    "ROLE_USER"
+  ],
+  "lectureList": [
+    1
+  ]
+}
 
 function Copyright(props) {
   return (
@@ -76,22 +92,24 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
   const [userData, setUserData] = useState({})
+  const [selectedCourseId, setSelectedCourseId] = useState(1);
   const [cookie, setCookie] = useCookies(['JWT'])
 
   useEffect(() => {
     const getUserData = async () => {
       get("http://localhost:8080/api/user")
         .then((response) => {
-          console.log(response);
           if (response.status !== 200) {
             setCookie('JWT', '', { path: '/' })
             document.location.href = '/';
           } else {
+            console.info("::Got User Info::")
+            console.log(response.data)
             setUserData(response.data);
           }
         })
@@ -145,7 +163,11 @@ export default function Dashboard() {
           >
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 8, mb: 4 }}>
-              <Router />
+              <Router
+                userData={userData}
+                selectedCourseId={selectedCourseId}
+                setSelectedCourseId={setSelectedCourseId}
+              />
               <Copyright sx={{ pt: 4 }} />
             </Container>
           </Box>
@@ -157,7 +179,7 @@ export default function Dashboard() {
         <Draggable>
           <Box sx={{ position: 'absolute', bottom: 0, right: 0, p: 3, zIndex: 1 }}>
             
-            <LearnTokTok />
+            <LearnTokTok userData={userData} />
           </Box>
         </Draggable>
         {/* </Box> */}

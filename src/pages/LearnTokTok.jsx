@@ -50,18 +50,57 @@ const mock2 = [{
 
 
 
-const LearnTokTok = () => {
+const LearnTokTok = ({userData}) => {
   const [courseData, setCourseData] = useState(mock);
   const [currentSelectedcourseId, setCurrentSelectedcourseId] = useState('')
   const [currentChat, setCurrentChat] = useState(mock2)
+  const [chat, setChat] = useState('')
 
   useEffect(() => {
-    get('http://localhost:8080/api/lecture/list')
+    get('http://localhost:8080/api/lecture/user-list')
       .then((response) => { 
         console.log(response.data)
-        setCourseData(response.data) })
+        setCourseData(response.data.lectureInfoList) })
       .catch((error) => { alert("데이터를 가져오는데 실패했습니다.") })
   }, [])
+
+  useEffect(() => {
+    if (currentSelectedcourseId === '') return;
+    post('http://localhost:8080/api/talk/list', {
+      "course_id": currentSelectedcourseId,
+      "lecturer_id": userData.userId
+    })
+      .then((response) => {
+        console.log(response.data)
+        setCurrentChat(response.data)
+      })
+      // .catch((error) => { alert("데이터를 가져오는데 실패했습니다.") })
+  }, [currentSelectedcourseId])
+
+  useEffect(() => { setTimeout(scrolldownChat, 5)}, [currentChat])
+
+  const scrolldownChat = () => {
+    // Scroll down chat-box to bottom
+    const chatBox = document.getElementById('chat-box')
+    chatBox.scrollTop = chatBox.scrollHeight
+  }
+
+  const handleTextFieldSubmit = (e) => {
+    if (e.keyCode === 13) {
+      post("http://localhost:8080/api/talk/create", {
+        "course_id": currentSelectedcourseId,
+        "content": e.target.value
+      })
+        .then((response) => {
+          console.log(response.data)
+          setCurrentChat([...currentChat, response.data])
+          setChat('')
+        })
+    }
+  };
+
+  const handleChat = (e) => { setChat(e.target.value) }
+
 
   const handleCurrentSelectedcourseIdChange = (id) => setCurrentSelectedcourseId(id);
   return (
@@ -83,8 +122,11 @@ const LearnTokTok = () => {
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", p: 1, height: "100%" }}>
           { currentSelectedcourseId == '' ? (<>
+          {/* 강의 목록 */}
             {courseData.length > 0 ? (courseData.map((item) => (
-              <Box key={item.lectureId} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedcourseIdChange(item.id)}}>
+              <Box key={item.course_id} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }}
+                onClick = {() => {handleCurrentSelectedcourseIdChange(item.course_id)}}
+              >
                 <Typography sx={{ fontSize: 12 }}>
                   {item.name}
                 </Typography>
@@ -102,14 +144,14 @@ const LearnTokTok = () => {
           </>
           ) : (
             <>
-              {courseData.filter((item) => item.id == currentSelectedcourseId).map((item) => (
+              {courseData.filter((item) => item.course_id == currentSelectedcourseId).map((item) => (
                 <Box key={item.id} sx={{ height: "100%"}}>
                   <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedcourseIdChange('')}}>
                     <Typography sx={{ fontSize: 12 }}>
                     {item.title} &nbsp; {item.professor}
                     </Typography>
                   </Box>
-                  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", py: 0.5, height: "130px", overflow: "auto" }}>
+                  <Box id="chat-box" sx={{ display: "flex", flexDirection: "column", alignItems: "left", py: 0.5, height: "130px", overflow: "auto" }}>
                     {currentChat.map((item, idx) => (
                       <Box key={idx} sx={{
                         display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center",
@@ -122,7 +164,7 @@ const LearnTokTok = () => {
                     ))}
                   </Box>
                   <Box sx={{ display: "block", bottom: 0 }}>
-                    <TextField variant="standard"></TextField>
+                    <TextField variant="standard" onKeyDown={handleTextFieldSubmit} value={chat} onChange={handleChat}></TextField>
                   </Box>
                 </Box>
               ))}

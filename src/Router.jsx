@@ -18,19 +18,33 @@ import CourseNotificationList from "./pages/course/CourseNotificationList";
 import CourseNotificationRead from "./pages/course/CourseNotificationRead";
 import CourseArchiveList from "./pages/course/CourseArchiveList";
 import CourseWrite from "./pages/course/CourseWrite";
-const Router = () => (
+import LectureWrite from "./pages/lecture/LectureWrite";
+const Router = ({
+  userData,
+  selectedCourseId,
+  setSelectedCourseId,
+}) => (
   <Routes>
     <Route path="/" element={<Home />}> </Route>
     <Route path="/onlineCourse" element={<OnlinCourse />}> </Route>
     <Route path="/addCourse" element={<AddCourse />}> </Route>
     <Route path="/courseQuestion/write" element={<CourseQuestion />}> </Route>
-    <Route path="/courseQuestion" element={<CourseQuestionList />}> </Route>
+    <Route path="/courseQuestion"
+      element={ <CourseQuestionList selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+    ></Route>
     <Route path="/courseQuestion/read" element={<CourseQuestionRead />}> </Route>
     <Route path="/courseRecord" element={<CourseRecord />}> </Route>
-    <Route path="/courseNotification" element={<CourseNotificationList />}> </Route>
+    <Route path="/courseNotification" 
+      element={<CourseNotificationList selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+    > </Route>
     <Route path="/courseNotification/read" element={<CourseNotificationRead />}> </Route>
     <Route path="/courseArchive" element={<CourseArchiveList />}> </Route>
-    <Route path="/courseWrite" element={<CourseWrite />}> </Route>
+    <Route path="/courseWrite"
+      element={<CourseWrite selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+    > </Route>
+    <Route path="/onlineCourse/write"
+      element={<LectureWrite userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+    > </Route>
 
   </Routes>
 )

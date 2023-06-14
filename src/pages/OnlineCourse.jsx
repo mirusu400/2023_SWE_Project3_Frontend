@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { useState, useEffect } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Container, Grid, Box, Paper, Typography, Table, TableBody,
@@ -9,6 +9,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import theme from '../theme';
 import "./ckboard.css";
+import { useNavigate } from 'react-router-dom';
 
 const mock = [
   { title: 'File I/O', start: '2023-04-27 00:00', end: '2023-05-01 00:00', progress: '10%' },
@@ -16,20 +17,20 @@ const mock = [
 ]
 
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  paddingRight: theme.spacing(3),
-  paddingLeft: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-  textAlign: 'left',
-  height: '270px',
-  
-}));
+
 
 
 const OnlinCourse = () => {
+
+  const navigate = useNavigate();
+  const [lecture, setLecture] = useState(mock);
+
+  const handleWriteLecture = () => {
+    navigate("/onlineCourse/write");
+  }
+
+  
+  
   return (
     <ThemeProvider theme={theme}>
       <Container>
@@ -67,6 +68,9 @@ const OnlinCourse = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Button variant="contained" sx={{ my: 3}} onClick={() => { handleWriteLecture();}}>
+          강의 추가
+        </Button>
       </Container>
     </ThemeProvider>
   )

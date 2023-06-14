@@ -64,18 +64,6 @@ const MainListItems = () => {
       <ListSubheader component="div" inset sx={{ pl: "72px"}}>
         공학교육
       </ListSubheader>
-      <ListItemButton>
-        <ListItemIcon sx={{ pl: "5px"}}>
-          <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary="학생 상담" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon sx={{ pl: "5px"}}>
-          <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary="학습성과 평가" />
-      </ListItemButton>
       <ListItemButton onClick={() => { navigate("/courseRecord")}}>
         <ListItemIcon sx={{ pl: "5px"}}>
           <AssignmentIcon />

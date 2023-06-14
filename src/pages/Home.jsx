@@ -66,7 +66,7 @@ const widgetList = [
     key: "key값3", value: (
       <Item>
         <Typography variant="h4" component="h4" sx={{ pb: 1 }}>
-          오늘의 수업
+          수업 목록
         </Typography>
         <HomeTodaysLesson />
       </Item>
