@@ -104,9 +104,11 @@ const AddCourse = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Button variant="contained" sx={{ my: 3}} onClick={() => {handleWriteLecture();}}>
-          강의 추가
-        </Button>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "right" }}>
+          <Button variant="contained" sx={{ my: 3}} onClick={() => {handleWriteLecture();}}>
+            강의 추가
+          </Button>
+        </Box>
         <Modal
           open={open}
           onClose={handleClose}

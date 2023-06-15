@@ -13,6 +13,7 @@ import theme from '../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const mock = {
   username: "테스트",
@@ -28,8 +29,12 @@ const mock = {
   }
 }
 
-const CourseRecord = () => {
-  const [data, setData] = useState(mock);
+const CourseRecord = ({userData}) => {
+  const [data, setData] = useState(userData);
+  const [courses, setCourses] = useState();
+  useEffect(() => {
+
+  }, [])
 
   const navigate = useNavigate();
 
@@ -59,7 +64,7 @@ const CourseRecord = () => {
             <TableBody>
               <TableRow>
                 <TableCell sx={{ textAlign: "center"}}>학부</TableCell>
-                <TableCell sx={{ textAlign: "center"}}>{data.id}</TableCell>
+                <TableCell sx={{ textAlign: "center"}}>{data.userId}</TableCell>
                 <TableCell sx={{ textAlign: "center"}}>{data.username}</TableCell>
                 <TableCell sx={{ textAlign: "center"}}>{data.semester}</TableCell>
                 

@@ -7,5 +7,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <CookiesProvider>
       <App />
     </CookiesProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )

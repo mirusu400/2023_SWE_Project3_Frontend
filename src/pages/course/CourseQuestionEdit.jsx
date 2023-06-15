@@ -25,7 +25,7 @@ const CourseList = [{
 }]
 
 
-const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
+const CourseQuestionEdit = () => {
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -34,19 +34,17 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
   const handleContentChange = (value) => setContent(value)
   const handleTitleChange = (event) => setTitle(event.target.value)
   const handleSubmit = () => {
-    console.log(selectedCourseId)
     console.log(title)
     console.log(content)
   }
-  const handleCourseChange = (event) => {
-    setSelectedCourseId(event.target.value);
-  }
 
   useEffect(() => {
-    get("http://localhost:8080/api/lecture/user-list")
-      .then((res) => {
-        console.log(res.data);
-        setCourseList(res.data.courseList);
+    const boardId = new URLSearchParams(window.location.search).get('id');
+
+    // TODO: Get content
+    get("http://localhost:8080/api/board/" + boardId)
+      .then((response) => {
+        setContent(response.content)
       })
   }, [])
 
@@ -55,21 +53,13 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
       
       <Container>
         <Typography variant='h1' component='h1' sx={{py: 3}}>
-          강의 질문 작성
+          강의 질문 수정
         </Typography>
         <Box>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="subject">과목</InputLabel>
-            <Select labelId="subject" id="subject" label="과목" onChange={handleCourseChange} defaultValue={selectedCourseId}>
-              {courseList.map((item) => (
-                <MenuItem value={item.course_id} key={item.course_id}>{item.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField id="title" label="제목" fullWidth sx={{my: 3}} onChange = { handleTitleChange } />
+          <TextField id="title" label="제목" fullWidth sx={{my: 3}} onChange = { handleTitleChange } value={title} />
           <CKEditor
             editor={ ClassicEditor }
-            data=""
+            data={content}
             onChange={( event, editor ) => { 
               handleContentChange(editor.getData());
             }}
@@ -83,4 +73,4 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
   )
 };
 
-export default CourseQuestionWrite;
+export default CourseQuestionEdit;

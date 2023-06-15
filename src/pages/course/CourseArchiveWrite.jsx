@@ -12,6 +12,7 @@ import theme from '../../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { get, post } from "../../utils"
+import { MuiFileInput } from 'mui-file-input';
 
 const CourseList = [{
   id: 1,
@@ -25,11 +26,12 @@ const CourseList = [{
 }]
 
 
-const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
+const CourseArchiveWrite = ({selectedCourseId, setSelectedCourseId}) => {
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [courseList, setCourseList] = useState(CourseList)
+  const [file, setFile] = useState(null)
 
   const handleContentChange = (value) => setContent(value)
   const handleTitleChange = (event) => setTitle(event.target.value)
@@ -42,7 +44,10 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
     setSelectedCourseId(event.target.value);
   }
 
+  const handleFileChange = (newFile) => { setFile(newFile) }
+
   useEffect(() => {
+    // TODO: 글 쓰기
     get("http://localhost:8080/api/lecture/user-list")
       .then((res) => {
         console.log(res.data);
@@ -55,7 +60,7 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
       
       <Container>
         <Typography variant='h1' component='h1' sx={{py: 3}}>
-          강의 질문 작성
+          강의 자료실 작성
         </Typography>
         <Box>
           <FormControl fullWidth>
@@ -75,6 +80,9 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
             }}
           />
         </Box>
+        <Box sx={{ pt: 3}}>
+          <MuiFileInput value={file} sx={{width: "100%"}} label="파일 첨부" onChange={handleFileChange} />
+        </Box>
       </Container>
       <Button variant="contained" sx={{mt: 3, mb: 3, ml: 3}} onClick = { handleSubmit }>
         글 쓰기
@@ -83,4 +91,4 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
   )
 };
 
-export default CourseQuestionWrite;
+export default CourseArchiveWrite;

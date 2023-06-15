@@ -16,14 +16,23 @@ const datebyMonth = {
   11: 30, 12: 31
 }
 
+const dates = [
+  28, 29, 30, 31, 1, 2, 3, 4, 5, 6, 7, 8,
+  9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+  19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+  29, 30, 1
+]
+
 
 const HomeDateTable = () => {
+
+  
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ px: 3 }}>
         <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between", pb: 1}}>
           <Typography variant="span" component="span">
-            2023. 4
+            2023. 6
           </Typography>
         </Box>
         {/* Middle line */}
@@ -65,14 +74,21 @@ const HomeDateTable = () => {
               토
             </Typography>
           </Grid>
-          {Array.from(Array(datebyMonth[4]).keys()).map((item, index) => (
+          {/* {Array.from(Array(datebyMonth[6]).keys()).map((item, index) => (
             <Grid key={index} item xs={1.7}>
               <Typography variant="span" component="span">
                 {item + 1}
               </Typography>
             </Grid>
-          ))}
+          ))} */}
           
+          {dates.map((item, index) => (
+            <Grid key={index} item xs={1.7}>
+              <Typography variant="span" component="span">
+                {item}
+              </Typography>
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </ThemeProvider>

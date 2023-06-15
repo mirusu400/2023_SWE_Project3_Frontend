@@ -25,7 +25,7 @@ const CourseList = [{
 }]
 
 
-const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
+const CourseNotificationWrite = ({selectedCourseId, setSelectedCourseId}) => {
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -83,4 +83,4 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
   )
 };
 
-export default CourseQuestionWrite;
+export default CourseNotificationWrite;
