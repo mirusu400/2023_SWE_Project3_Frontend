@@ -16,7 +16,7 @@ import theme from '../theme';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Container, TextareaAutosize } from '@mui/material';
+import { Container, Divider, TextareaAutosize } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useEffect } from 'react';
 import { post, get } from '../utils';
@@ -59,7 +59,6 @@ const LearnTokTok = ({userData}) => {
   useEffect(() => {
     get('http://localhost:8080/api/lecture/user-list')
       .then((response) => { 
-        console.log(response.data)
         setCourseData(response.data.courseList) })
       .catch((error) => { alert("데이터를 가져오는데 실패했습니다.") })
   }, [])
@@ -148,9 +147,10 @@ const LearnTokTok = ({userData}) => {
                 <Box key={item.id} sx={{ height: "100%"}}>
                   <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", py: 0.5, cursor: "pointer" }} onClick = {() => {handleCurrentSelectedcourseIdChange('')}}>
                     <Typography sx={{ fontSize: 12 }}>
-                    {item.name} &nbsp; 학습톡톡
+                    {item.name} 학습톡톡
                     </Typography>
                   </Box>
+                  <Divider sx={{ mb: 0.5 }} />
                   <Box id="chat-box" sx={{ display: "flex", flexDirection: "column", alignItems: "left", py: 0.5, height: "130px", overflow: "auto" }}>
                     {currentChat.map((item, idx) => (
                       <Box key={idx} sx={{

@@ -40,7 +40,7 @@ const CourseList = [{
   title: '컴퓨터네트워크',
 }]
 
-const CourseNotificationList = ({selectedCourseId, setSelectedCourseId}) => {
+const CourseNotificationList = ({userData, selectedCourseId, setSelectedCourseId}) => {
   const navigate = useNavigate();
   const rowsPerPage = 10;
   const [data, setData] = useState(mock);
@@ -96,22 +96,22 @@ const CourseNotificationList = ({selectedCourseId, setSelectedCourseId}) => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{textAlign: "center"}}>순서</TableCell>
-                  <TableCell sx={{textAlign: "center", width: "40%"}}>제목</TableCell>
-                  <TableCell sx={{textAlign: "center", width: "20%"}}>작성시간</TableCell>
-                  <TableCell sx={{textAlign: "center"}}>작성자</TableCell>
+                  <TableCell sx={{}}>순서</TableCell>
+                  <TableCell sx={{ width: "40%"}}>제목</TableCell>
+                  <TableCell sx={{ width: "20%"}}>작성시간</TableCell>
+                  <TableCell sx={{}}>작성자</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data && data.length > 0 &&
                 data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
                   <TableRow key={idx} onClick={() => handleClickBoard(row.id)} sx={{cursor: "pointer"}}>
-                    <TableCell component="th" align="center">
+                    <TableCell component="th">
                       {row.id}
                     </TableCell>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.created_at}</TableCell>
-                    <TableCell align="center">{row.user_name}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.created_at}</TableCell>
+                    <TableCell>{row.user_name}</TableCell>
                   </TableRow>
                 ))}
                 {(!data || data.length === 0) && (
@@ -133,9 +133,11 @@ const CourseNotificationList = ({selectedCourseId, setSelectedCourseId}) => {
             labelRowsPerPage=""
           />
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "right"}}>
-          <Button variant="contained" sx={{mt: 3, mb: 3}} onClick={() => { navigate('/courseNotification/write') }}>글쓰기</Button>
-        </Box>
+        {(userData && userData.authorityDtoSet && userData.authorityDtoSet.includes("ROLE_ADMIN") && (
+          <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "right"}}>
+            <Button variant="contained" sx={{mt: 3, mb: 3}} onClick={() => { navigate('/courseNotification/write') }}>글쓰기</Button>
+          </Box>
+        ))}
       </Container>
     </ThemeProvider>
   )

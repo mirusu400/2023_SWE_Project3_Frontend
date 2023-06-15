@@ -18,7 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 
-const CourseWrite = () => {
+const CourseWrite = ({userData}) => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [credit, setCredit] = useState(1)
@@ -111,12 +111,16 @@ const CourseWrite = () => {
               </Select>
             </FormControl>
             <FormControl fullWidth sx={{ mb: 3, ml: 2 }}>
-              <InputLabel htmlFor="subject" filled>학년</InputLabel>
-              <Select labelId="subject" id="subject" label="학년" onChange={ handleSemesterChange }>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
+              <InputLabel htmlFor="subject" filled>학기</InputLabel>
+              <Select labelId="subject" id="subject" label="학기" onChange={ handleSemesterChange }>
+                <MenuItem value={1}>1학기</MenuItem>
+                <MenuItem value={2}>2학기</MenuItem>
+                <MenuItem value={3}>3학기</MenuItem>
+                <MenuItem value={4}>4학기</MenuItem>
+                <MenuItem value={5}>5학기</MenuItem>
+                <MenuItem value={6}>6학기</MenuItem>
+                <MenuItem value={7}>7학기</MenuItem>
+                <MenuItem value={8}>8학기</MenuItem>
               </Select>
             </FormControl>
           </Box>

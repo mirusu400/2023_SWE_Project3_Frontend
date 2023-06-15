@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { get, post, del } from '../../utils';
 import dayjs, { Dayjs } from 'dayjs';
+import AttachmentFile from '../components/AttachmentFile';
 
 const mock = {
   id: 1,
@@ -30,14 +31,12 @@ const mock = {
 }
 
 
-const CourseBoardRead = () => {
+const CourseBoardRead = ({userData}) => {
 
   const [data, setData] = useState(mock)
-
+  const articleId = new URLSearchParams(window.location.search).get("id");
   const navigate = useNavigate();
-
   const handleRemove = () => {
-    const articleId = new URLSearchParams(window.location.search).get("id");
     del(`http://localhost:8080/api/article/delete/${articleId}`, {
     })
       .then((response) => {
@@ -78,16 +77,38 @@ const CourseBoardRead = () => {
             dangerouslySetInnerHTML={{ __html: data.content }}
           />
         </Box>
+        <Divider sx={{ mb: 2 }} />
+        {(data && data.filePathList && data.filePathList.length > 0) && (
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='h5' component='h5' sx={{ py: 3 }}>
+              첨부파일
+            </Typography>
+            {data.filePathList.map((filePath, index) => (
+              <AttachmentFile key={index} filePath={filePath} />
+            ))}
+          </Box>
+        )}
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          
           <Button variant="contained" sx={{ mt: 3, mb: 3 }} onClick={() => { navigate(-1) }}>
             글 목록으로
           </Button>
-          <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={() => {handleRemove()}}>
-            삭제하기
-          </Button>
-          <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={() => {handleEdit()}} >
-            수정하기
-          </Button>
+          {(data.user_id === userData.userId) && (
+            <>
+              <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={() => {handleRemove()}}>
+                삭제하기
+              </Button>
+              <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={() => {handleEdit()}} >
+                수정하기
+              </Button>
+            </>
+          )}
+          
+          {(data.type == "과제" && data.parent_article_id == null) && (
+            <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={() => { navigate(`/courseHomework/reply?articleId=${articleId}`) }} >
+              제출하기
+            </Button>
+          )}
         </Box>
       </Container>
     </ThemeProvider>

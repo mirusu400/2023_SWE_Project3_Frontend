@@ -156,7 +156,7 @@ export default function Dashboard() {
             </Toolbar>
             <Divider />
             <List component="nav">
-                <MainListItems />
+              <MainListItems userData={userData} />
               <Divider sx={{ my: 1 }} />
             </List>
           </Drawer>

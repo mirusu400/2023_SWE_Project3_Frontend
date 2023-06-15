@@ -34,12 +34,24 @@ const CourseRecord = ({userData}) => {
   const [data, setData] = useState(userData);
   const [courses, setCourses] = useState();
   const [totalCredit, setTotalCredit] = useState(0);
+  const [courseHistory, setCourseHistory] = useState([]);
   useEffect(() => {
     get("http://localhost:8080/api/lecture/user-list")
       .then((response) => {
         setCourses(response.data.courseList);
         setTotalCredit(response.data.totalCredit);
-      })
+      });
+
+    (async () => {
+      const tmpCourseHistory = []
+      for (let i = 1; i < 9; i++) {
+        const courseHistoryResponse = await get(`http://localhost:8080/api/lecture/get-grade/${i}`);
+        tmpCourseHistory.push(courseHistoryResponse.data);
+      }
+      console.log("tmpCourseHistory")
+      console.log(tmpCourseHistory)
+      setCourseHistory(tmpCourseHistory);
+    })();
   }, [])
 
   const navigate = useNavigate();
@@ -72,7 +84,7 @@ const CourseRecord = ({userData}) => {
                 <TableCell sx={{ textAlign: "center"}}>학부</TableCell>
                 <TableCell sx={{ textAlign: "center"}}>{data.userId}</TableCell>
                 <TableCell sx={{ textAlign: "center"}}>{data.username}</TableCell>
-                <TableCell sx={{ textAlign: "center"}}>{data.semester}</TableCell>
+                <TableCell sx={{ textAlign: "center"}}>3</TableCell>
                 
               </TableRow>
             </TableBody>
@@ -95,9 +107,9 @@ const CourseRecord = ({userData}) => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell align="center">0</TableCell>
-                <TableCell align="center">0</TableCell>
-                <TableCell align="center">0</TableCell>
+                <TableCell align="center">35</TableCell>
+                <TableCell align="center">17</TableCell>
+                <TableCell align="center">52</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -134,6 +146,42 @@ const CourseRecord = ({userData}) => {
             </TableBody>
           </Table>
         </TableContainer>
+
+        <Typography variant='h4' component='h4' sx={{ pt: 3 }}>
+          학기이력
+        </Typography>
+        <Divider sx={{ my: 1 }} />
+        {/* 학기 이력 */}
+        {courseHistory && courseHistory.length > 0 && courseHistory.map((row, idx) => (
+          <>
+            <Typography variant="h5" component="h5" sx={{ py: 2, fontSize: 20}}>
+              {idx + 1} 학기
+            </Typography>
+            <TableContainer component={Paper} sx={{ width: '100%' }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ textAlign: "center", width: "33%" }}>과목명</TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>학기</TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>학점</TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>총점</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {row && row.length > 0 && row.map((item, idx) => (
+                    <TableRow key={idx}>
+                      <TableCell align="center">{item.course.name}</TableCell>
+                      <TableCell align="center">{item.semester}</TableCell>
+                      <TableCell align="center">{item.grade > 90 ? "A" : item.grade > 80 ? "B" : item.grade > 70 ? "C" : item.grade > 60 ? "D" : "F"}</TableCell>
+                      <TableCell align="center">{item.score}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+
+        ))}
       </Container>
     </ThemeProvider>
   )

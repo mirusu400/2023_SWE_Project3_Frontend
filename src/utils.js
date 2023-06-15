@@ -17,6 +17,8 @@ const postBoard = async (url, data, file = undefined) => {
   const formData = new FormData();
   if (file)
     formData.append('files', file);
+  if (data.parent_article_id)
+    formData.append('parent_article_id', data.parent_article_id);
   formData.append('board_id', data.board_id);
   formData.append('user_id', data.user_id);
   formData.append('name', data.name);

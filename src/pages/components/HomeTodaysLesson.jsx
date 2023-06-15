@@ -50,7 +50,7 @@ const HomeTodaysLesson = () => {
             </Typography>
           </Box>
         ))}
-        { (!lectures) && <Typography variant="span" component="span">수강중인 강의가 없습니다.</Typography>}
+        { (!lectures || lectures.length == 0) && <Typography variant="span" component="span">수강중인 강의가 없습니다.</Typography>}
       </Box>
     </ThemeProvider>
   )

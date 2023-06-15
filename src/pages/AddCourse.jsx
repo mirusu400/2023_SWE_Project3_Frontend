@@ -23,7 +23,7 @@ const mock = [{
 
 
 
-const AddCourse = () => {
+const AddCourse = ({userData}) => {
 
   const navigate = useNavigate();
   const [courses, setCourses] = useState(mock);
@@ -80,7 +80,7 @@ const AddCourse = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courses.map((row, idx) => (
+              {courses && courses.length > 0 && courses.map((row, idx) => (
                 <TableRow key={idx}>
                   <TableCell align="center">{row.name}</TableCell>
                   <TableCell align="center">{row.semester}</TableCell>
@@ -101,14 +101,21 @@ const AddCourse = () => {
                   </TableCell>
                 </TableRow>
               ))}
+              {(!courses || courses.length === 0) && (
+                <TableRow>
+                  <TableCell align="center" colSpan={6}>수강 가능한 강의가 없습니다.</TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "right" }}>
-          <Button variant="contained" sx={{ my: 3}} onClick={() => {handleWriteLecture();}}>
-            강의 추가
-          </Button>
-        </Box>
+        {(userData && userData.authorityDtoSet && userData.authorityDtoSet.includes("ROLE_ADMIN") && (
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "right" }}>
+            <Button variant="contained" sx={{ my: 3}} onClick={() => {handleWriteLecture();}}>
+              강의 추가
+            </Button>
+          </Box>
+        ))}
         <Modal
           open={open}
           onClose={handleClose}

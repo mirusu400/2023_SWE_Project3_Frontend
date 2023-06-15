@@ -13,6 +13,7 @@ import "./../ckboard.css";
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { get, post } from "../../utils";
+import dayjs from 'dayjs';
 
 const mock = [
   { title: 'File I/O', date: '2023-04-27 00:00', writer: 'ㅇㅇ(223.39)', id: "1" },
@@ -44,6 +45,7 @@ const CourseHomeworkList = ({selectedCourseId, setSelectedCourseId}) => {
   const navigate = useNavigate();
   const rowsPerPage = 10;
   const [data, setData] = useState(mock);
+  const [childData, setChildData] = useState([]);
   const [courseList, setCourseList] = useState(CourseList);
   const [page, setPage] = useState(0)
 
@@ -68,11 +70,27 @@ const CourseHomeworkList = ({selectedCourseId, setSelectedCourseId}) => {
     get(`http://localhost:8080/api/article/list/${selectedCourseId}`)
       .then((res) => {
         const newData = [];
+        const childData = [];
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].type === "과제") {
-            newData.push(res.data[i]);
+            if (res.data[i].parent_article_id !== null) {
+              childData.push(res.data[i]);
+            } else {
+              newData.push(res.data[i]);
+            }
           }
         }
+        for (let i = 0; i < childData.length; i++) {
+          for (let j = 0; j < newData.length; j++) {
+            if (childData[i].parent_article_id === newData[j].id) {
+              if (newData[j].child)
+                newData[j].child.push(childData[i]);
+              else
+                newData[j].child = [childData[i]];
+            }
+          }
+        }
+        console.log(newData);
         setData(newData);
       })
   }, [])
@@ -96,23 +114,35 @@ const CourseHomeworkList = ({selectedCourseId, setSelectedCourseId}) => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{textAlign: "center"}}>순서</TableCell>
-                  <TableCell sx={{textAlign: "center", width: "40%"}}>제목</TableCell>
-                  <TableCell sx={{textAlign: "center", width: "20%"}}>작성시간</TableCell>
-                  <TableCell sx={{textAlign: "center"}}>작성자</TableCell>
+                  <TableCell>순서</TableCell>
+                  <TableCell sx={{ width: "40%"}}>제목</TableCell>
+                  <TableCell sx={{ width: "20%"}}>작성시간</TableCell>
+                  <TableCell sx={{}}>작성자</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data && data.length > 0 &&
                 data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
-                  <TableRow key={idx} onClick={() => handleClickBoard(row.id)} sx={{cursor: "pointer"}}>
-                    <TableCell component="th" align="center">
-                      {row.id}
-                    </TableCell>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.created_at}</TableCell>
-                    <TableCell align="center">{row.user_name}</TableCell>
-                  </TableRow>
+                  <>
+                    <TableRow key={idx} onClick={() => handleClickBoard(row.id)} sx={{cursor: "pointer"}}>
+                      <TableCell component="th">
+                        {row.id}
+                      </TableCell>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{dayjs(row.created_at).format("YYYY-MM-DD HH:mm:ss")}</TableCell>
+                      <TableCell>{row.user_name}</TableCell>
+                    </TableRow>
+                    {row.child && row.child.map((child, idx) => (
+                      <TableRow key={idx} onClick={() => handleClickBoard(child.id)} sx={{cursor: "pointer", backgroundColor: "#F0F0F0"}}>
+                        <TableCell component="th">
+                          ㄴ
+                        </TableCell>
+                        <TableCell>{child.name}</TableCell>
+                        <TableCell>{dayjs(child.created_at).format("YYYY-MM-DD HH:mm:ss")}</TableCell>
+                        <TableCell>{child.user_name}</TableCell>
+                      </TableRow>
+                    ))}
+                  </>
                 ))}
                 {(!data || data.length === 0) && (
                   <TableRow>

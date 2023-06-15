@@ -13,13 +13,18 @@ import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import HelpIcon from '@mui/icons-material/Help';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { useNavigate } from 'react-router-dom';
 import { Link } from '@mui/material';
+import { useEffect } from 'react';
 
-const MainListItems = () => {
+const MainListItems = ({userData}) => {
   const navigate = useNavigate();
+  useEffect(() => {
+    console.log(userData)
+  }, [userData])
   return (
     <React.Fragment>
       <ListSubheader component="div" inset sx={{ pl: "72px"}}>
@@ -77,6 +82,15 @@ const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="성적 확인" />
       </ListItemButton>
+      {(userData && userData.authorityDtoSet && userData.authorityDtoSet.includes("ROLE_ADMIN") &&(
+        <ListItemButton onClick={() => { navigate("/courseGrade")}}>
+          <ListItemIcon sx={{ pl: "5px"}}>
+            <AccountBoxIcon />
+          </ListItemIcon>
+          <ListItemText primary="성적 입력" />
+        </ListItemButton>
+      ))}
+      
     </React.Fragment>
   )
 };

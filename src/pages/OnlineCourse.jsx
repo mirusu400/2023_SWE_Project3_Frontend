@@ -14,14 +14,15 @@ import { useNavigate } from 'react-router-dom';
 import { get, post } from '../utils';
 import dayjs from 'dayjs';
 
-const mock = [{
-  "id": 1,
-  "course_id": 1,
-  "classroom": "새빛관",
-  "lecture_name": "123",
-  "begin_at": "2023-06-16T02:14:51",
-  "end_at": "2023-06-23T00:00:00"
-}]
+// const mock = [{
+//   "id": 1,
+//   "course_id": 1,
+//   "classroom": "새빛관",
+//   "lecture_name": "123",
+//   "begin_at": "2023-06-16T02:14:51",
+//   "end_at": "2023-06-23T00:00:00"
+// }]
+const mock = []
 
 const CourseList = [{
   id: 1,
@@ -36,7 +37,7 @@ const CourseList = [{
 
 
 
-const OnlineCourse = ({selectedCourseId, setSelectedCourseId}) => {
+const OnlineCourse = ({userData, selectedCourseId, setSelectedCourseId}) => {
 
   const navigate = useNavigate();
   const [lectures, setLectures] = useState(mock);
@@ -66,15 +67,9 @@ const OnlineCourse = ({selectedCourseId, setSelectedCourseId}) => {
   }
 
   const fetchQuestionList = () => {
-    get(`http://localhost:8080/api/course/get-course?id=${selectedCourseId}`)
+    get(`http://localhost:8080/api/lecture/get-course?id=${selectedCourseId}`)
       .then((res) => {
-        const newData = [];
-        for (let i = 0; i < res.data.length; i++) {
-          if (res.data[i].type === "질문과답변") {
-            newData.push(res.data[i]);
-          }
-        }
-        setLectures(res.dat[3]);
+        setLectures(res.data[3][0]);
       })
   }
 
@@ -119,7 +114,7 @@ const OnlineCourse = ({selectedCourseId, setSelectedCourseId}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {lectures.map((row, idx) => (
+              {lectures && lectures.length > 0 && lectures.map((row, idx) => (
                 <TableRow key={idx}>
                   <TableCell component="th" align="center">
                     {idx + 1}
@@ -136,12 +131,25 @@ const OnlineCourse = ({selectedCourseId, setSelectedCourseId}) => {
                   </TableCell>
                 </TableRow>
               ))}
+              {(!lectures || lectures.length === 0) && (
+                <TableRow>
+                  <TableCell component="th" align="center" colSpan={5}>
+                    강의가 없습니다.
+
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
-        <Button variant="contained" sx={{ my: 3}} onClick={() => { handleWriteLecture();}}>
-          강의 추가
-        </Button>
+        
+        {(userData && userData.authorityDtoSet && userData.authorityDtoSet.includes("ROLE_ADMIN") && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 3 }}>
+            <Button variant="contained" sx={{ }} onClick={() => { handleWriteLecture();}}>
+              강의 추가
+            </Button>
+          </Box>
+        ))}
       </Container>
     </ThemeProvider>
   )

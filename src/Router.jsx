@@ -23,6 +23,8 @@ import CourseHomeworkWrite from "./pages/course/CourseHomeworkWrite";
 import CourseHomeworkList from "./pages/course/CourseHomeworkList";
 import CourseBoardRead from "./pages/course/CourseBoardRead";
 import CourseBoardEdit from "./pages/course/CourseBoardEdit";
+import CourseHomeworkReplyWrite from "./pages/course/CourseHomeworkReplyWrite";
+import CourseGrade from "./pages/CourseGrade";
 
 const Router = ({
   userData,
@@ -32,9 +34,9 @@ const Router = ({
   <Routes>
     <Route path="/" element={<Home />}> </Route>
     <Route path="/onlineCourse" 
-      element={<OnlinCourse selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} />}
+      element={<OnlinCourse userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} />}
     > </Route>
-    <Route path="/addCourse" element={<AddCourse />}> </Route>
+    <Route path="/addCourse" element={<AddCourse userData={userData} />}> </Route>
     <Route path="/courseQuestion/write" 
       element={<CourseQuestionWrite userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
     > </Route>
@@ -43,7 +45,7 @@ const Router = ({
     ></Route>
     <Route path="/courseRecord" element={<CourseRecord userData={userData}/>}> </Route>
     <Route path="/courseNotification" 
-      element={<CourseNotificationList selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+      element={<CourseNotificationList userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
     > </Route>
     <Route path="/courseNotification/write"
       element={<CourseNotificationWrite userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
@@ -57,10 +59,10 @@ const Router = ({
     </Route>
     
     <Route path="/courseWrite"
-      element={<CourseWrite selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+      element={<CourseWrite userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
     ></Route>
     <Route path="/courseRead"
-      element={<CourseBoardRead />}
+      element={<CourseBoardRead userData={userData}/>}
     ></Route>
     <Route path="/onlineCourse/write"
       element={<LectureWrite userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
@@ -76,6 +78,14 @@ const Router = ({
     <Route path="/courseHomework/write"
       element={<CourseHomeworkWrite userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
     > </Route>
+    <Route path="/courseHomework/reply"
+      element={<CourseHomeworkReplyWrite userData={userData} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId}/>}
+    > </Route>
+
+    <Route path="/courseGrade"
+      element={<CourseGrade userData={userData} />}
+    > </Route>
+
 
 
   </Routes>

@@ -98,22 +98,22 @@ const CourseArchiveList = ({selectedCourseId, setSelectedCourseId}) => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{textAlign: "center"}}>순서</TableCell>
-                  <TableCell sx={{textAlign: "center", width: "40%"}}>제목</TableCell>
-                  <TableCell sx={{textAlign: "center", width: "20%"}}>작성시간</TableCell>
-                  <TableCell sx={{textAlign: "center"}}>작성자</TableCell>
+                  <TableCell sx={{}}>순서</TableCell>
+                  <TableCell sx={{ width: "40%" }}>제목</TableCell>
+                  <TableCell sx={{ width: "20%" }}>작성시간</TableCell>
+                  <TableCell sx={{}}>작성자</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data && data.length > 0 &&
                 data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
                   <TableRow key={idx} onClick={() => handleClickBoard(row.id)} sx={{cursor: "pointer"}}>
-                    <TableCell component="th" align="center">
+                    <TableCell component="th">
                       {row.id}
                     </TableCell>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.created_at}</TableCell>
-                    <TableCell align="center">{row.user_name}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.created_at}</TableCell>
+                    <TableCell>{row.user_name}</TableCell>
                   </TableRow>
                 ))}
                 {(!data || data.length === 0) && (
