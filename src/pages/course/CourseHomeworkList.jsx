@@ -58,15 +58,9 @@ const CourseHomeworkList = ({selectedCourseId, setSelectedCourseId}) => {
 
   const handleCourseChange = (event) => {
     setSelectedCourseId(event.target.value);
-    // TODO: 해당 Course Id를 바탕으로 질문 목록 가져오기
   }
 
-  useEffect(() => {
-    get("http://localhost:8080/api/lecture/user-list")
-      .then((res) => {
-        console.log(res.data);
-        setCourseList(res.data.courseList);
-      })
+  const fetchHomeworkList = () => {
     get(`http://localhost:8080/api/article/list/${selectedCourseId}`)
       .then((res) => {
         const newData = [];
@@ -90,10 +84,20 @@ const CourseHomeworkList = ({selectedCourseId, setSelectedCourseId}) => {
             }
           }
         }
-        console.log(newData);
         setData(newData);
       })
+  }
+
+  useEffect(() => {
+    get("http://localhost:8080/api/lecture/user-list")
+      .then((res) => {
+        console.log(res.data);
+        setCourseList(res.data.courseList);
+      })
+    fetchHomeworkList();
   }, [])
+
+  useEffect(() => { fetchHomeworkList(); }, [selectedCourseId])
 
   return (
     <ThemeProvider theme={theme}>

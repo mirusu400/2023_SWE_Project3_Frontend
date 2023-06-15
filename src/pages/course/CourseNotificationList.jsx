@@ -56,15 +56,9 @@ const CourseNotificationList = ({userData, selectedCourseId, setSelectedCourseId
 
   const handleCourseChange = (event) => {
     setSelectedCourseId(event.target.value);
-    // TODO: 해당 Course Id를 바탕으로 질문 목록 가져오기
   }
 
-  useEffect(() => {
-    get("http://localhost:8080/api/lecture/user-list")
-      .then((res) => {
-        console.log(res.data);
-        setCourseList(res.data.courseList);
-      })
+  const fetchNotificationList = () => {
     get(`http://localhost:8080/api/article/list/${selectedCourseId}`)
       .then((res) => {
         const newData = [];
@@ -75,7 +69,17 @@ const CourseNotificationList = ({userData, selectedCourseId, setSelectedCourseId
         }
         setData(newData);
       })
+  }
+  useEffect(() => {
+    get("http://localhost:8080/api/lecture/user-list")
+      .then((res) => {
+        console.log(res.data);
+        setCourseList(res.data.courseList);
+      })
+    fetchNotificationList();
   }, [])
+
+  useEffect(() => { fetchNotificationList(); }, [selectedCourseId])
 
   return (
     <ThemeProvider theme={theme}>
