@@ -15,53 +15,78 @@ import theme from '../../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { get, post, del } from '../../utils';
+import dayjs, { Dayjs } from 'dayjs';
 
 const mock = {
   id: 1,
-  title: '테스트 제목',
+  board_id: 1,
+  user_id: 1,
+  name: '테스트 제목',
   content: '<p>테스트 내용</p>',
-  writer: '테스트 작성자',
+  type: '공지사항',
   date: "2021-10-01 00:00",
 }
 
 
-const CourseNotificationRead = () => {
+const CourseBoardRead = () => {
 
-  const [subject, setSubject] = useState('')
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [data, setData] = useState(mock)
 
   const navigate = useNavigate();
 
-
-  const handleSubjectChange = (event) => setSubject(event.target.value)
-  const handleContentChange = (value) => setContent(value)
-  const handleTitleChange = (event) => setTitle(event.target.value)
-  const handleSubmit = () => {
-    console.log(subject)
-    console.log(title)
-    console.log(content)
+  const handleRemove = () => {
+    const articleId = new URLSearchParams(window.location.search).get("id");
+    del(`http://localhost:8080/api/article/delete/${articleId}`, {
+    })
+      .then((response) => {
+        alert("삭제되었습니다.")
+        navigate(-1);
+      })
   }
+
+  const handleEdit = () => {
+    const articleId = new URLSearchParams(window.location.search).get("id");
+    navigate(`/courseEdit?id=${articleId}`)
+  }
+
+  useEffect(() => {
+    const articleId = new URLSearchParams(window.location.search).get("id");
+    post("http://localhost:8080/api/article/get", {
+      article_id: articleId
+    })
+      .then((response) => {
+        setData(response.data)
+      })
+  }, [])
+
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ display: "flex", flexDirection: "column" }}>
         <Typography variant='h1' component='h1' sx={{ pt: 3 }}>
-          {mock.title}
+          {data.name}
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant='h5' component='h5' sx={{ py: 3 }}>
-            {mock.writer} | {mock.date}
+            {data.user_name} | {dayjs(data.created_at).format("YYYY-MM-DD HH:mm:ss")} | {data.type}
           </Typography>
         </Box>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ minHeight: "400px", backgroundColor: "white", p: 2}}>
           <div
-            dangerouslySetInnerHTML={{ __html: mock.content }}
+            dangerouslySetInnerHTML={{ __html: data.content }}
           />
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <Button variant="contained" sx={{ mt: 3, mb: 3 }} onClick={() => { navigate("/courseNotification") }}>
+          <Button variant="contained" sx={{ mt: 3, mb: 3 }} onClick={() => { navigate(-1) }}>
             글 목록으로
+          </Button>
+          <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={() => {handleRemove()}}>
+            삭제하기
+          </Button>
+          <Button variant="contained" sx={{ mt: 3, mb: 3, ml: 3 }} onClick={() => {handleEdit()}} >
+            수정하기
           </Button>
         </Box>
       </Container>
@@ -69,4 +94,4 @@ const CourseNotificationRead = () => {
   )
 };
 
-export default CourseNotificationRead;
+export default CourseBoardRead;

@@ -130,6 +130,7 @@ export default function Dashboard() {
         console.log(response.data)
         setSelectedCourse(response.data)
       })
+      .catch((error) => {})
   }, [selectedCourseId])
 
   return (

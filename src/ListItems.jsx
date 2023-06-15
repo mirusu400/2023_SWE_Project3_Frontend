@@ -14,6 +14,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import HelpIcon from '@mui/icons-material/Help';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { useNavigate } from 'react-router-dom';
 import { Link } from '@mui/material';
 
@@ -36,11 +37,11 @@ const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="온라인강의" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate('/addCourse')}>
+      <ListItemButton onClick={() => navigate('/courseHomework')}>
         <ListItemIcon sx={{ pl: "5px"}}>
-          <AssignmentTurnedInIcon />
+          <MenuBookIcon />
         </ListItemIcon>
-        <ListItemText primary="수강신청" />
+        <ListItemText primary="과제제출" />
       </ListItemButton>
       <ListItemButton onClick={() => navigate('/courseNotification')}>
         <ListItemIcon sx={{ pl: "5px"}}>
@@ -62,8 +63,14 @@ const MainListItems = () => {
       </ListItemButton>
       
       <ListSubheader component="div" inset sx={{ pl: "72px"}}>
-        공학교육
+        수강관리
       </ListSubheader>
+      <ListItemButton onClick={() => navigate('/addCourse')}>
+        <ListItemIcon sx={{ pl: "5px"}}>
+          <AssignmentTurnedInIcon />
+        </ListItemIcon>
+        <ListItemText primary="수강신청" />
+      </ListItemButton>
       <ListItemButton onClick={() => { navigate("/courseRecord")}}>
         <ListItemIcon sx={{ pl: "5px"}}>
           <AssignmentIcon />

@@ -40,8 +40,7 @@ const CourseList = [{
   title: '컴퓨터네트워크',
 }]
 
-
-const CourseQuestionList = ({selectedCourseId, setSelectedCourseId}) => {
+const CourseHomeworkList = ({selectedCourseId, setSelectedCourseId}) => {
   const navigate = useNavigate();
   const rowsPerPage = 10;
   const [data, setData] = useState(mock);
@@ -52,41 +51,37 @@ const CourseQuestionList = ({selectedCourseId, setSelectedCourseId}) => {
     setPage(newPage);
   }
 
-  const handleCourseChange = (event) => {
-    setSelectedCourseId(event.target.value);
-  }
 
   const handleClickBoard = (id) => { navigate(`/courseRead?id=${id}`) }
 
-  
-  const fetchQuestionList = () => {
+  const handleCourseChange = (event) => {
+    setSelectedCourseId(event.target.value);
+    // TODO: 해당 Course Id를 바탕으로 질문 목록 가져오기
+  }
+
+  useEffect(() => {
+    get("http://localhost:8080/api/lecture/user-list")
+      .then((res) => {
+        console.log(res.data);
+        setCourseList(res.data.courseList);
+      })
     get(`http://localhost:8080/api/article/list/${selectedCourseId}`)
       .then((res) => {
         const newData = [];
         for (let i = 0; i < res.data.length; i++) {
-          if (res.data[i].type === "질문과답변") {
+          if (res.data[i].type === "과제") {
             newData.push(res.data[i]);
           }
         }
         setData(newData);
       })
-  }
-  useEffect(() => {
-    get("http://localhost:8080/api/lecture/user-list")
-      .then((res) => {
-        setCourseList(res.data.courseList);
-      })
-    
-    fetchQuestionList();
   }, [])
-
-  useEffect(() => { fetchQuestionList() }, [selectedCourseId]);
 
   return (
     <ThemeProvider theme={theme}>
       <Container>
         <Typography variant='h1' component='h1' sx={{py: 3}}>
-          강의 질문 목록
+          강의 과제 목록
         </Typography>
         <FormControl fullWidth sx={{ mb: 3 }}>
           <InputLabel htmlFor="subject" filled>과목</InputLabel>
@@ -109,19 +104,19 @@ const CourseQuestionList = ({selectedCourseId, setSelectedCourseId}) => {
               </TableHead>
               <TableBody>
                 {data && data.length > 0 &&
-                  data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
-                    <TableRow key={idx} onClick={() => handleClickBoard(row.id)} sx={{cursor: "pointer"}}>
-                      <TableCell component="th" align="center">
-                        {row.id}
-                      </TableCell>
-                      <TableCell align="center">{row.name}</TableCell>
-                      <TableCell align="center">{row.created_at}</TableCell>
-                      <TableCell align="center">{row.user_name}</TableCell>
-                    </TableRow>
-                  ))}
+                data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
+                  <TableRow key={idx} onClick={() => handleClickBoard(row.id)} sx={{cursor: "pointer"}}>
+                    <TableCell component="th" align="center">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="center">{row.name}</TableCell>
+                    <TableCell align="center">{row.created_at}</TableCell>
+                    <TableCell align="center">{row.user_name}</TableCell>
+                  </TableRow>
+                ))}
                 {(!data || data.length === 0) && (
                   <TableRow>
-                    <TableCell colSpan={4} align="center">등록된 질문과 답변이 없습니다.</TableCell>
+                    <TableCell colSpan={4} align="center">등록된 과제가 없습니다.</TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -139,11 +134,11 @@ const CourseQuestionList = ({selectedCourseId, setSelectedCourseId}) => {
           />
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "right"}}>
-          <Button variant="contained" sx={{mt: 3, mb: 3}} onClick={() => { navigate('/courseQuestion/write') }}>글쓰기</Button>
+          <Button variant="contained" sx={{mt: 3, mb: 3}} onClick={() => { navigate('/courseHomework/write') }}>글쓰기</Button>
         </Box>
       </Container>
     </ThemeProvider>
   )
 };
 
-export default CourseQuestionList;
+export default CourseHomeworkList;

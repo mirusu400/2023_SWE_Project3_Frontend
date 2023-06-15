@@ -14,6 +14,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { get } from '../utils';
 
 const mock = {
   username: "테스트",
@@ -32,8 +33,13 @@ const mock = {
 const CourseRecord = ({userData}) => {
   const [data, setData] = useState(userData);
   const [courses, setCourses] = useState();
+  const [totalCredit, setTotalCredit] = useState(0);
   useEffect(() => {
-
+    get("http://localhost:8080/api/lecture/user-list")
+      .then((response) => {
+        setCourses(response.data.courseList);
+        setTotalCredit(response.data.totalCredit);
+      })
   }, [])
 
   const navigate = useNavigate();
@@ -89,9 +95,9 @@ const CourseRecord = ({userData}) => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell align="center">{data.courseOverall.majorCredit}</TableCell>
-                <TableCell align="center">{data.courseOverall.refineCredit}</TableCell>
-                <TableCell align="center">{data.courseOverall.majorCredit + data.courseOverall.refineCredit}</TableCell>
+                <TableCell align="center">0</TableCell>
+                <TableCell align="center">0</TableCell>
+                <TableCell align="center">0</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -102,24 +108,27 @@ const CourseRecord = ({userData}) => {
           수강과목
         </Typography>
         <Divider sx={{ my: 1 }} />
+        <Typography variant="span" component="span">
+          총 학점: {totalCredit}
+        </Typography>
         {/* 수강 과목 */}
         <TableContainer component={Paper} sx={{ width: '100%', mt: 3 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell sx={{ textAlign: "center" }}>과목명</TableCell>
-                <TableCell sx={{ textAlign: "center" }}>수강기간</TableCell>
+                <TableCell sx={{ textAlign: "center" }}>학기</TableCell>
                 <TableCell sx={{ textAlign: "center" }}>학점</TableCell>
-                <TableCell sx={{ textAlign: "center" }}>성적</TableCell>
+                <TableCell sx={{ textAlign: "center" }}>종류</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.courses.map((row, idx) => (
+              {courses && courses.length > 0 && courses.map((row, idx) => (
                 <TableRow key={row.id}>
-                  <TableCell align="center">{row.title}</TableCell>
-                  <TableCell align="center">{row.start}<br />{row.end}</TableCell>
-                  <TableCell align="center">{row.point}</TableCell>
-                  <TableCell align="center">{row.record}</TableCell>
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.semester}</TableCell>
+                  <TableCell align="center">{row.credit}</TableCell>
+                  <TableCell align="center">{row.type}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

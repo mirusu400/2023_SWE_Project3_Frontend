@@ -53,7 +53,7 @@ const CourseArchiveList = ({selectedCourseId, setSelectedCourseId}) => {
   }
 
   const handleClickBoard = (id) => {
-    navigate(`/courseArchive/read?id=${id}`)
+    navigate(`/courseRead?id=${id}`)
   }
 
   const handleCourseChange = (event) => {
@@ -66,6 +66,16 @@ const CourseArchiveList = ({selectedCourseId, setSelectedCourseId}) => {
       .then((res) => {
         console.log(res.data);
         setCourseList(res.data.courseList);
+      })
+    get(`http://localhost:8080/api/article/list/${selectedCourseId}`)
+      .then((res) => {
+        const newData = [];
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].type === "자료실") {
+            newData.push(res.data[i]);
+          }
+        }
+        setData(newData);
       })
   }, [])
 
@@ -101,11 +111,16 @@ const CourseArchiveList = ({selectedCourseId, setSelectedCourseId}) => {
                     <TableCell component="th" align="center">
                       {row.id}
                     </TableCell>
-                    <TableCell align="center">{row.title}</TableCell>
-                    <TableCell align="center">{row.date}</TableCell>
-                    <TableCell align="center">{row.writer}</TableCell>
+                    <TableCell align="center">{row.name}</TableCell>
+                    <TableCell align="center">{row.created_at}</TableCell>
+                    <TableCell align="center">{row.user_name}</TableCell>
                   </TableRow>
                 ))}
+                {(!data || data.length === 0) && (
+                  <TableRow>
+                    <TableCell colSpan={4} align="center">등록된 자료가 없습니다.</TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

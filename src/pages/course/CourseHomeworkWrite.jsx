@@ -11,8 +11,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import theme from '../../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { get, post } from "../../utils"
+import { get, post, postBoard } from "../../utils"
 import { MuiFileInput } from 'mui-file-input';
+import { useNavigate } from 'react-router-dom';
 
 const CourseList = [{
   id: 1,
@@ -26,7 +27,8 @@ const CourseList = [{
 }]
 
 
-const CourseHomeworkWrite = ({selectedCourseId, setSelectedCourseId}) => {
+const CourseHomeworkWrite = ({userData, selectedCourseId, setSelectedCourseId}) => {
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -36,9 +38,17 @@ const CourseHomeworkWrite = ({selectedCourseId, setSelectedCourseId}) => {
   const handleContentChange = (value) => setContent(value)
   const handleTitleChange = (event) => setTitle(event.target.value)
   const handleSubmit = () => {
-    console.log(selectedCourseId)
-    console.log(title)
-    console.log(content)
+    postBoard("http://localhost:8080/api/article/add", {
+      board_id: selectedCourseId,
+      user_id: userData.userId,
+      name: title,
+      content: content,
+      type: "과제"
+    }, file)
+      .then(() => {
+        alert("성공적으로 등록되었습니다.")
+        navigate("/courseHomework")
+      })
   }
   const handleCourseChange = (event) => {
     setSelectedCourseId(event.target.value);
@@ -47,7 +57,6 @@ const CourseHomeworkWrite = ({selectedCourseId, setSelectedCourseId}) => {
   const handleFileChange = (newFile) => { setFile(newFile) }
 
   useEffect(() => {
-    // TODO: 글 쓰기
     get("http://localhost:8080/api/lecture/user-list")
       .then((res) => {
         console.log(res.data);

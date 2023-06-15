@@ -74,11 +74,13 @@ const mock = [
 const CourseDetail = ({ courseId }) => {
 
   const [data, setData] = useState(mock)
+  const [timeData, setTimeData] = useState([])
 
   useEffect(() => {
     get(`http://localhost:8080/api/lecture/get-course?id=${courseId}`)
       .then((res) => {
         setData(res.data);
+        setTimeData(res.data[1])
       })
   }, [])
 
@@ -121,6 +123,33 @@ const CourseDetail = ({ courseId }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Typography variant='h5' component='h5' sx={{pt: 3, pb: 3}}>
+            수업 시간
+          </Typography>
+          <TableContainer component={Paper} sx={{ width: '100%' }}>
+            <Table sx={{ }} aria-label="simple table">
+              <TableBody>
+                <TableRow>
+                  <TableCell sx={{ textAlign: "center" }}>요일</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>강의실</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>시작 시간</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>종료 시간</TableCell>
+                </TableRow>
+              </TableBody>
+              {timeData && timeData.length > 0 && timeData.map((time, index) => {
+                console.log(time)
+                return (
+                <TableBody key={index}>
+                  <TableCell sx={{ textAlign: "center" }}>{time.day_of_week}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{time.classroom}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{time.begin_at}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{time.end_at}</TableCell>
+                </TableBody>
+)})}
+            </Table>
+          </TableContainer>
+              
+          
         </Box>
       </Container>
     </ThemeProvider>

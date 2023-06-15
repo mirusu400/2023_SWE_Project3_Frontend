@@ -11,7 +11,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import theme from '../../theme';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { get, post } from "../../utils"
+import { get, post, postBoard } from "../../utils"
+import { useNavigate } from 'react-router-dom';
 
 const CourseList = [{
   id: 1,
@@ -25,8 +26,9 @@ const CourseList = [{
 }]
 
 
-const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
+const CourseQuestionWrite = ({userData, selectedCourseId, setSelectedCourseId}) => {
 
+  const navigate = useNavigate();
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [courseList, setCourseList] = useState(CourseList)
@@ -34,9 +36,17 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
   const handleContentChange = (value) => setContent(value)
   const handleTitleChange = (event) => setTitle(event.target.value)
   const handleSubmit = () => {
-    console.log(selectedCourseId)
-    console.log(title)
-    console.log(content)
+    postBoard("http://localhost:8080/api/article/add", {
+      board_id: selectedCourseId,
+      user_id: userData.userId,
+      name: title,
+      content: content,
+      type: "질문과답변"
+    }, undefined)
+      .then(() => {
+        alert("성공적으로 등록되었습니다.")
+        navigate("/courseQuestion")
+      })
   }
   const handleCourseChange = (event) => {
     setSelectedCourseId(event.target.value);
@@ -69,7 +79,7 @@ const CourseQuestionWrite = ({selectedCourseId, setSelectedCourseId}) => {
           <TextField id="title" label="제목" fullWidth sx={{my: 3}} onChange = { handleTitleChange } />
           <CKEditor
             editor={ ClassicEditor }
-            data=""
+            data={content}
             onChange={( event, editor ) => { 
               handleContentChange(editor.getData());
             }}
